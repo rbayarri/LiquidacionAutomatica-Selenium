@@ -113,8 +113,8 @@ public class Group {
   @Override
   public String toString() {
     return "Nombre del grupo: " + this.groupName
-            + "\nExpediente: " + this.file
-            + "\nTipo OP: " + this.typeOP;
+        + "\nExpediente: " + this.file
+        + "\nTipo OP: " + this.typeOP;
   }
 
   public String toStringLiquidaciones() {
@@ -177,19 +177,28 @@ public class Group {
   }
 
   public String readCell(Sheet sheet, int vRow, int vColumn) {
-    Double aux = null;
     Row row = sheet.getRow(vRow);
     Cell cell = row.getCell(vColumn - 1);
+    String cellValue = null;
     try {
-      aux = Double.parseDouble(cell.toString());
-      return String.valueOf(aux.intValue());
-    } catch (Exception e) {
-    }
-    try {
-      return cell.toString();
+      cellValue = cell.toString();
     } catch (Exception e) {
       return null;
     }
+    return cellValue;
+  }
+
+  public String readCell(Sheet sheet, int vRow, int vColumn, char type) {
+    Double aux = null;
+    String cellValue = readCell(sheet, vRow, vColumn);
+    if (cellValue != null && !cellValue.isEmpty()) {
+      if (type == 'i') {
+        aux = Double.parseDouble(cellValue);
+        return String.valueOf(aux.intValue());
+      }
+      return cellValue;
+    }
+    return null;
   }
 
   public void readingHeaders(Sheet sheet, String type) {
@@ -198,9 +207,9 @@ public class Group {
     String numberFile = null;
     String yearFile = null;
     if (type.equals("Contratos")) {
-      String month = readCell(sheet, 0, 2).toUpperCase();
-      String year = readCell(sheet, 1, 2);
-      String listing = readCell(sheet, 2, 2);
+      String month = readCell(sheet, 0, 2, 'i').toUpperCase();
+      String year = readCell(sheet, 1, 2, 'i');
+      String listing = readCell(sheet, 2, 2, 'i');
       Validations.isValidMonth(month);
       Validations.isYear(year);
       Validations.isNumber(listing);
@@ -210,9 +219,9 @@ public class Group {
         JOptionPane.showMessageDialog(null, "No se reconoce el tipo de expediente: " + typeFile);
         System.exit(0);
       }
-      numberFile = readCell(sheet, 4, 2);
+      numberFile = readCell(sheet, 4, 2,'i');
       Validations.isNumber(numberFile);
-      yearFile = readCell(sheet, 5, 2);
+      yearFile = readCell(sheet, 5, 2,'i');
       Validations.isYear(yearFile);
     } else {
       String period = readCell(sheet, 0, 1);
@@ -243,9 +252,9 @@ public class Group {
       Validations.validCUIT(CUIT);
       String beneficiary = readCell(sheet, i, 3) + ", " + readCell(sheet, i, 4);
       String typeNUI = "NUI";
-      String numberNUI = readCell(sheet, i, 13);
+      String numberNUI = readCell(sheet, i, 13,'i');
       Validations.isNumber(numberNUI);
-      String yearNUI = readCell(sheet, i, 14);
+      String yearNUI = readCell(sheet, i, 14,'i');
       Validations.isYear(yearNUI);
 
       Compromiso compromiso = new Compromiso();
@@ -302,8 +311,8 @@ public class Group {
     int i = 1;
     while (true) {
       if (CUIT.equals(readCell(sheet, index + i, 2))
-              && numberNUI.equals(readCell(sheet, index + i, 13))
-              && yearNUI.equals(readCell(sheet, index + i, 14))) {
+          && numberNUI.equals(readCell(sheet, index + i, 13,'i'))
+          && yearNUI.equals(readCell(sheet, index + i, 14,'i'))) {
         quantityInvoices++;
         i++;
       } else {
@@ -331,7 +340,7 @@ public class Group {
       compromiso.setNumber(Integer.parseInt(numberNUI));
       compromiso.setYear(Integer.parseInt(yearNUI));
 
-      String dependency = readCell(sheet, i, 2);
+      String dependency = readCell(sheet, i, 2,'i');
       while (dependency.length() != 3) {
         dependency = "0" + dependency;
       }

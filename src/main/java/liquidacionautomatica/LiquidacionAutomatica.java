@@ -9,6 +9,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import javax.swing.JOptionPane;
 import liquidacionautomatica.entities.User;
+import liquidacionautomatica.exceptions.CredentialsNotFound;
 
 /**
  *
@@ -27,7 +28,7 @@ public class LiquidacionAutomatica {
       try {
         user = new User();
         creado = true;
-      } catch (Exception e) {
+      } catch (IOException | CredentialsNotFound e) {
         String usuarioPilaga = JOptionPane.showInputDialog("Ingrese su usuario de Pilagá");
         String clavePilaga = JOptionPane.showInputDialog("Ingrese su clave de Pilagá");
 
