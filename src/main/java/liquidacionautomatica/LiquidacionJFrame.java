@@ -317,73 +317,78 @@ public class LiquidacionJFrame extends javax.swing.JFrame {
         Writer writer = new Writer(group, directory);
         writer.writeFirstRead(group);
 
-        this.jLabel20.setEnabled(true);
-        Browser browser = new Browser();
-        try {
-          browser.open();
-        } catch (Exception e) {
-          JOptionPane.showMessageDialog(null, "No se encontraron navegadores instalados");
-          System.exit(0);
-        }
-        browser.goToPilaga();
-        browser.loginPilaga(user);
-        String form1 = null;
-        String form2 = null;
-        String form3 = null;
-        if (this.typeLiquidacion.getSelectedItem().toString().equals("Contratos")) {
-          browser.goToDevengadoCompras();
-          form1 = "2282";
-          form2 = "84000213";
-          form3 = "2035";
-        } else {
-          browser.goToDevengadoBecas();
-          form1 = "1559";
-          form2 = "15000119";
-          form3 = "1521";
-        }
-        browser.liquidar(group, form1, form2, form3, this.typeLiquidacion.getSelectedItem().toString());
-        writer.writeResultLiquidacion(group);
+        if (JOptionPane.showConfirmDialog(null,
+                writer.writeFirstReadConfirmation(group,
+                        this.typeLiquidacion.getSelectedItem().toString()),"¿Continuar?",0) == 0) {
 
-        this.jLabel21.setEnabled(true);
-        if (!this.jCheckBox1.isSelected()) {
-          browser.createGroup(group, this.typeLiquidacion.getSelectedItem().toString());
-        }
-
-        this.jLabel16.setEnabled(true);
-        group.setLiquidacionesARetener(group.getLiquidacionesLiquidadas());
-        browser.goToAutorizacionPorGrupoNivel4();
-        browser.filtrarGrupo(group);
-        if (!browser.sameTotal(group, '4')) {
-          this.jLabel24.setEnabled(true);
-          browser.differences(group);
-          writer.writeLiquidacionesExcluidas(group);
-        }
-        if (this.typeLiquidacion.getSelectedItem().toString().equals("Contratos")) {
+          this.jLabel20.setEnabled(true);
+          Browser browser = new Browser();
           try {
-            this.jLabel23.setEnabled(true);
-            browser.retenerManual(group, amount2);
-
-          } catch (InterruptedException ex) {
-            // Demora en esperar que cargue la retencion
+            browser.open();
+          } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "No se encontraron navegadores instalados");
+            System.exit(0);
           }
-        } else { // Para ord 36
-          group.addRetenidasResto();
-        }
-        this.jLabel22.setEnabled(true);
-        browser.goToAutorizacionPorGrupoNivel4();
-        browser.filtrarGrupo(group);
-        browser.retenerRestoGrupo(group);
-        writer.writeLiquidacionNoRetenidas(group);
+          browser.goToPilaga();
+          browser.loginPilaga(user);
+          String form1 = null;
+          String form2 = null;
+          String form3 = null;
+          if (this.typeLiquidacion.getSelectedItem().toString().equals("Contratos")) {
+            browser.goToDevengadoCompras();
+            form1 = "2282";
+            form2 = "84000213";
+            form3 = "2035";
+          } else {
+            browser.goToDevengadoBecas();
+            form1 = "1559";
+            form2 = "15000119";
+            form3 = "1521";
+          }
+          browser.liquidar(group, form1, form2, form3, this.typeLiquidacion.getSelectedItem().toString());
+          writer.writeResultLiquidacion(group);
 
-        this.jLabel25.setEnabled(true);
-        browser.goToAutorizacionPorGrupoNivel7();
-        browser.filtrarGrupo(group);
-        if (!browser.sameTotal(group, '7')) {
-          JOptionPane.showMessageDialog(null, "Revisar diferencias");
+          this.jLabel21.setEnabled(true);
+          if (!this.jCheckBox1.isSelected()) {
+            browser.createGroup(group, this.typeLiquidacion.getSelectedItem().toString());
+          }
+
+          this.jLabel16.setEnabled(true);
+          group.setLiquidacionesARetener(group.getLiquidacionesLiquidadas());
+          browser.goToAutorizacionPorGrupoNivel4();
+          browser.filtrarGrupo(group);
+          if (!browser.sameTotal(group, '4')) {
+            this.jLabel24.setEnabled(true);
+            browser.differences(group);
+            writer.writeLiquidacionesExcluidas(group);
+          }
+          if (this.typeLiquidacion.getSelectedItem().toString().equals("Contratos")) {
+            try {
+              this.jLabel23.setEnabled(true);
+              browser.retenerManual(group, amount2);
+
+            } catch (InterruptedException ex) {
+              // Demora en esperar que cargue la retencion
+            }
+          } else { // Para ord 36
+            group.addRetenidasResto();
+          }
+          this.jLabel22.setEnabled(true);
+          browser.goToAutorizacionPorGrupoNivel4();
+          browser.filtrarGrupo(group);
+          browser.retenerRestoGrupo(group);
+          writer.writeLiquidacionNoRetenidas(group);
+
+          this.jLabel25.setEnabled(true);
+          browser.goToAutorizacionPorGrupoNivel7();
+          browser.filtrarGrupo(group);
+          if (!browser.sameTotal(group, '7')) {
+            JOptionPane.showMessageDialog(null, "Revisar diferencias");
+          }
+          browser.goToLiquidationsList(group);
+          writer.writeForExp(group);
+          JOptionPane.showMessageDialog(null, "Se procesó el grupo con éxito\nDescargar OP y unirlas en un único archivo\nConsultar el archivo con los resultados de la liquidación");
         }
-        browser.goToLiquidationsList(group);
-        writer.writeForExp(group);
-        JOptionPane.showMessageDialog(null, "Se procesó el grupo con éxito\nDescargar OP y unirlas en un único archivo\nConsultar el archivo con los resultados de la liquidación");
       }
       System.exit(0);
     }//GEN-LAST:event_liquidarActionPerformed

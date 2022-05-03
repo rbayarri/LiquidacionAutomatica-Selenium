@@ -35,6 +35,30 @@ public class Writer {
     }
   }
 
+  public String writeFirstReadConfirmation(Group group, String type) {
+
+    String message = "Resumen de las liquidaciones a realizar...\n";
+    message += "Nombre del grupo: " + group.getGroupName()
+            + "\nExpediente: " + group.getFile().toString();
+    for (Liquidacion li : group.getLiquidaciones()) {
+      message += "\n";
+      message += formatoPesos.format(li.getTotalAmount());
+      message += " - ";
+      if (type.equalsIgnoreCase("Contratos")) {
+        LiquidacionContrato liq = (LiquidacionContrato) li;
+        message += String.format("%-50s", liq.getBeneficiary());
+      } else {
+        Liquidacion36 liq = (Liquidacion36) li;
+        message += liq.getCompromiso();
+
+      }
+    }
+    message += "\nTotal: ";
+    message += formatoPesos.format(group.getTotalAmount());
+
+    return message;
+  }
+
   public void writeFirstRead(Group group) {
 
     String message = String.format("%-30s", "Nombre del grupo:");
