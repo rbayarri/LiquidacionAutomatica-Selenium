@@ -70,6 +70,8 @@ public class Writer {
         message += l.getOp().toString();
         message += " - ";
         message += l.getBeneficiary();
+        message += " - ";
+        message += l.getCUIT();
         message += "\n";
       }
     }
