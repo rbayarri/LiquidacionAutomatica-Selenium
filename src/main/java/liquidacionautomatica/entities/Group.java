@@ -176,10 +176,14 @@ public class Group {
     return amount;
   }
 
-  public String readCell(Sheet sheet, int vRow, int vColumn) {
+  public String readCell(Sheet sheet, int vRow, int vColumn, boolean cuit) {
     Double aux = null;
     Row row = sheet.getRow(vRow);
     Cell cell = row.getCell(vColumn - 1);
+    if (cuit) {
+      String valorCuit = cell.toString().replace(".", "").replace("E10", "");
+      return valorCuit;
+    }
     try {
       aux = Double.parseDouble(cell.toString());
       return String.valueOf(aux.intValue());
@@ -198,24 +202,24 @@ public class Group {
     String numberFile = null;
     String yearFile = null;
     if (type.equals("Contratos")) {
-      String month = readCell(sheet, 0, 2).toUpperCase();
-      String year = readCell(sheet, 1, 2);
-      String listing = readCell(sheet, 2, 2);
+      String month = readCell(sheet, 0, 2, false).toUpperCase();
+      String year = readCell(sheet, 1, 2, false);
+      String listing = readCell(sheet, 2, 2, false);
       Validations.isValidMonth(month);
       Validations.isYear(year);
       Validations.isNumber(listing);
       groupName = "HONORARIOS " + month + " " + listing + " " + year;
-      typeFile = readCell(sheet, 3, 2).toUpperCase();
+      typeFile = readCell(sheet, 3, 2, false).toUpperCase();
       if (!typeFile.equals("E_EX")) {
         JOptionPane.showMessageDialog(null, "No se reconoce el tipo de expediente: " + typeFile);
         System.exit(0);
       }
-      numberFile = readCell(sheet, 4, 2);
+      numberFile = readCell(sheet, 4, 2, false);
       Validations.isNumber(numberFile);
-      yearFile = readCell(sheet, 5, 2);
+      yearFile = readCell(sheet, 5, 2, false);
       Validations.isYear(yearFile);
     } else {
-      String period = readCell(sheet, 0, 1);
+      String period = readCell(sheet, 0, 1, false);
 
       groupName = "INCENTIVOS " + period.substring(period.indexOf(' ') + 1);
       typeFile = "E_EX";
@@ -234,18 +238,18 @@ public class Group {
   public void readingContratosExcel(Sheet sheet) {
     int i = 8;
     while (true) {
-      String afip = readCell(sheet, i, 1);
+      String afip = readCell(sheet, i, 1, false);
       if (afip == null || afip.isEmpty()) {
         return;
       }
       Validations.validAFIP(afip);
-      String CUIT = readCell(sheet, i, 2);
+      String CUIT = readCell(sheet, i, 2, true);
       Validations.validCUIT(CUIT);
-      String beneficiary = readCell(sheet, i, 3) + ", " + readCell(sheet, i, 4);
+      String beneficiary = readCell(sheet, i, 3, false) + ", " + readCell(sheet, i, 4, false);
       String typeNUI = "NUI";
-      String numberNUI = readCell(sheet, i, 13);
+      String numberNUI = readCell(sheet, i, 13, false);
       Validations.isNumber(numberNUI);
-      String yearNUI = readCell(sheet, i, 14);
+      String yearNUI = readCell(sheet, i, 14, false);
       Validations.isYear(yearNUI);
 
       Compromiso compromiso = new Compromiso();
@@ -266,19 +270,19 @@ public class Group {
       String liquidacionDescription = "";
       int quantityInvoices = determinerQuantityInvoices(sheet, CUIT, numberNUI, yearNUI, i);
       for (int j = 0; j < quantityInvoices; j++) {
-        String type = readCell(sheet, i + j, 9);
+        String type = readCell(sheet, i + j, 9, false);
         Validations.validTypeInvoice(type);
-        char letter = readCell(sheet, i + j, 10).toUpperCase().charAt(0);
+        char letter = readCell(sheet, i + j, 10, false).toUpperCase().charAt(0);
         Validations.validLetterInvoice(letter, afip);
-        String number = readCell(sheet, i + j, 11);
+        String number = readCell(sheet, i + j, 11, false);
         if (number == null || number.isEmpty()) {
           JOptionPane.showMessageDialog(null, "No se indica número de comprobante");
           System.exit(0);
         }
-        String date = readCell(sheet, i + j, 12);
-        String amount = readCell(sheet, i + j, 8);
+        String date = readCell(sheet, i + j, 12, false);
+        String amount = readCell(sheet, i + j, 8, false);
         Validations.validAmount(amount);
-        String description = readCell(sheet, i + j, 6) + " - " + readCell(sheet, i + j, 7);
+        String description = readCell(sheet, i + j, 6, false) + " - " + readCell(sheet, i + j, 7, false);
         Validations.validDescription(description);
         liquidacionDescription += description + " - ";
 
@@ -301,9 +305,9 @@ public class Group {
     int quantityInvoices = 1;
     int i = 1;
     while (true) {
-      if (CUIT.equals(readCell(sheet, index + i, 2))
-              && numberNUI.equals(readCell(sheet, index + i, 13))
-              && yearNUI.equals(readCell(sheet, index + i, 14))) {
+      if (CUIT.equals(readCell(sheet, index + i, 2, false))
+              && numberNUI.equals(readCell(sheet, index + i, 13, false))
+              && yearNUI.equals(readCell(sheet, index + i, 14, false))) {
         quantityInvoices++;
         i++;
       } else {
@@ -317,7 +321,7 @@ public class Group {
 
     int i = 2;
     while (true) {
-      String NUI = readCell(sheet, i, 1);
+      String NUI = readCell(sheet, i, 1, false);
       if (NUI == null || NUI.isEmpty()) {
         return;
       }
@@ -331,12 +335,12 @@ public class Group {
       compromiso.setNumber(Integer.parseInt(numberNUI));
       compromiso.setYear(Integer.parseInt(yearNUI));
 
-      String dependency = readCell(sheet, i, 2);
+      String dependency = readCell(sheet, i, 2, false);
       while (dependency.length() != 3) {
         dependency = "0" + dependency;
       }
       Validations.validDependency(dependency);
-      String amount = readCell(sheet, i, 3);
+      String amount = readCell(sheet, i, 3, false);
       Validations.validAmount(amount);
 
       OP op = getOP(sheet, i, 4);
@@ -354,7 +358,7 @@ public class Group {
   }
 
   public OP getOP(Sheet sheet, int vRow, int vColumn) {
-    String opTotal = readCell(sheet, vRow, vColumn);
+    String opTotal = readCell(sheet, vRow, vColumn, false);
     OP op = null;
     if (opTotal != null && !opTotal.isEmpty()) {
       String typeOP = opTotal.substring(0, 4);

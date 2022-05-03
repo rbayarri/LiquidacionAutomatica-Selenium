@@ -67,7 +67,7 @@ public class Validations {
       System.exit(0);
     }
     try {
-      Long.parseLong(CUIT);
+      Double.parseDouble(CUIT);
     } catch (NumberFormatException e) {
       JOptionPane.showMessageDialog(null, "El CUIT no tiene el formato correcto: " + CUIT);
       System.exit(0);
