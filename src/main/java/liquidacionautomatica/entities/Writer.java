@@ -100,6 +100,7 @@ public class Writer {
       }
     }
     this.write(message);
+    SendEmailTLS.sendMessage("Liquidaciones excluidas por no tener CBU cargado - " + group.getGroupName(), message, true);
   }
 
   public void writeLiquidacionNoRetenidas(Group group) {

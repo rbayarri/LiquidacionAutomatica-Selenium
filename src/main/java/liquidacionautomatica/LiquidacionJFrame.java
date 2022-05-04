@@ -16,6 +16,7 @@ import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import liquidacionautomatica.entities.Browser;
 import liquidacionautomatica.entities.Group;
+import liquidacionautomatica.entities.SendEmailTLS;
 import liquidacionautomatica.entities.User;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -285,7 +286,7 @@ public class LiquidacionJFrame extends javax.swing.JFrame {
 
       JFileChooser fc = new JFileChooser();
       fc.setCurrentDirectory(new File("M:\\CONTRATOS\\PENDIENTES\\"));
-      FileNameExtensionFilter filter = new FileNameExtensionFilter("TEXT FILES", "txt", "text", "xlsx", "xlsm");
+      FileNameExtensionFilter filter = new FileNameExtensionFilter("Excel Files", "xlsx", "xlsm");
       fc.setFileFilter(filter);
       int respuesta = fc.showOpenDialog(this);
       if (respuesta == JFileChooser.APPROVE_OPTION) {
@@ -319,7 +320,7 @@ public class LiquidacionJFrame extends javax.swing.JFrame {
 
         if (JOptionPane.showConfirmDialog(null,
                 writer.writeFirstReadConfirmation(group,
-                        this.typeLiquidacion.getSelectedItem().toString()),"¿Continuar?",0) == 0) {
+                        this.typeLiquidacion.getSelectedItem().toString()), "¿Continuar?", 0) == 0) {
 
           this.jLabel20.setEnabled(true);
           Browser browser = new Browser();
@@ -361,6 +362,7 @@ public class LiquidacionJFrame extends javax.swing.JFrame {
             this.jLabel24.setEnabled(true);
             browser.differences(group);
             writer.writeLiquidacionesExcluidas(group);
+            SendEmailTLS.sendMessageCBU(group);
           }
           if (this.typeLiquidacion.getSelectedItem().toString().equals("Contratos")) {
             try {

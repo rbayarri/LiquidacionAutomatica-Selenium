@@ -130,10 +130,14 @@ public class Browser {
         int index = findIndex(liquidacion.getCompromiso());
         if (index == -1) {
           liquidacion.setResultLiquidacion(((LiquidacionContrato) liquidacion).getBeneficiary() + " - No se encuentra el " + liquidacion.getCompromiso().toString() + " o no tiene saldo");
+          SendEmailTLS.sendMessage("Error en la liquidación en " + group.getGroupName(),
+                  liquidacion.getResultLiquidacion(), false);
           otherFilter(form1);
           continue;
         }
         if (!isThereEnoughBalance(liquidacion, index)) {
+          SendEmailTLS.sendMessage("Error en la liquidación en " + group.getGroupName(),
+                  liquidacion.getResultLiquidacion(), false);
           otherFilter(form1);
           continue;
         }
@@ -144,6 +148,8 @@ public class Browser {
             completeDataContratos((LiquidacionContrato) liquidacion);
           } catch (NotMatchBeneficiary e) {
             liquidacion.setResultLiquidacion(e.getMessage());
+            SendEmailTLS.sendMessage("Error en la liquidación del " + group.getGroupName(),
+                    liquidacion.getResultLiquidacion(), false);
             scrollToEndPage();
             driver.findElement(By.id("ci_2035_cancelar")).click();
             otherFilter(form1);
