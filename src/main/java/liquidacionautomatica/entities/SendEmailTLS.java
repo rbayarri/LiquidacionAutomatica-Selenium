@@ -15,11 +15,11 @@ import javax.mail.Transport;
 
 public class SendEmailTLS {
 
-  private static final String host = "smtp.hostinger.com.ar";
-  private static final String user = "contacto@mabay.com.ar";//change accordingly  
-  private static final String password = ":]mu6wK8gH6";//change accordingly  
+  private static final String host = "smtp.uncu.edu.ar";
+  private static final String user = "rbayarri";//change accordingly  
+  private static final String password = "contador4uncuyo";//change accordingly  
 
-  private static final String toCBU = "lcalanoce@uncu.edu.ar";//change accordingly  
+  private static final String toCBU = "lcalanoce@uncu.edu.ar";//change accordingly   
   private static final String toContratos = "contratos@uncu.edu.ar";//change accordingly  
 
 //Get the session object  
@@ -43,15 +43,15 @@ public class SendEmailTLS {
   public static void sendMessage(String subject, String text, boolean intern) {
     try {
       MimeMessage message = new MimeMessage(SendEmailTLS.session);
-      message.setFrom(new InternetAddress(user));
+      message.setFrom(new InternetAddress(user + "@uncu.edu.ar"));
       if (intern) {
         message.addRecipient(Message.RecipientType.TO, new InternetAddress(toCBU));
       } else {
         message.addRecipient(Message.RecipientType.TO, new InternetAddress(toContratos));
+        message.addRecipient(Message.RecipientType.CC, new InternetAddress("msalinas@uncu.edu.ar"));
       }
-      message.addRecipient(Message.RecipientType.CC, new InternetAddress("msalinas@uncu.edu.ar"));
       message.setSubject(subject);
-      message.setText(text + "\n\nNo responder a esta casilla de correo. Este es un mail automáticos.\nResponder a msalinas@uncu.edu.ar");
+      message.setText(text + "\n\nNo responder a esta casilla de correo. Este es un mail automático.\nResponder a msalinas@uncu.edu.ar");
 
       //send the message  
       Transport.send(message);

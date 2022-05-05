@@ -8,6 +8,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import javax.swing.JOptionPane;
+import liquidacionautomatica.entities.SendEmailTLS;
 import liquidacionautomatica.entities.User;
 import liquidacionautomatica.exceptions.CredentialsNotFound;
 
@@ -21,7 +22,7 @@ public class LiquidacionAutomatica {
    * @param args the command line arguments
    */
   public static void main(String[] args) {
-
+    
     User user = null;
     boolean creado = false;
     while (!creado) {
@@ -31,7 +32,7 @@ public class LiquidacionAutomatica {
       } catch (IOException | CredentialsNotFound e) {
         String usuarioPilaga = JOptionPane.showInputDialog("Ingrese su usuario de Pilagá");
         String clavePilaga = JOptionPane.showInputDialog("Ingrese su clave de Pilagá");
-
+        
         if (usuarioPilaga == null || usuarioPilaga.isEmpty() || clavePilaga == null || clavePilaga.isEmpty()) {
           JOptionPane.showMessageDialog(null, "Los datos ingresados son incorrectos");
           return;
