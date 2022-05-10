@@ -362,7 +362,7 @@ public class LiquidacionJFrame extends javax.swing.JFrame {
             this.jLabel24.setEnabled(true);
             browser.differences(group);
             writer.writeLiquidacionesExcluidas(group);
-            SendEmailTLS.sendMessageCBU(group);
+            SendEmailTLS.sendMessageCBU(group,user);
           }
           if (this.typeLiquidacion.getSelectedItem().toString().equals("Contratos")) {
             try {

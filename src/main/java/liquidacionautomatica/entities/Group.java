@@ -6,10 +6,18 @@ package liquidacionautomatica.entities;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import javax.swing.JOptionPane;
 import liquidacionautomatica.validations.Validations;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFDataFormat;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 
@@ -273,6 +281,26 @@ public class Group {
     return null;
   }
 
+  public String readCellDate(Sheet sheet, int vRow, int vColumn) {
+    Row row = sheet.getRow(vRow);
+    Cell cell = row.getCell(vColumn - 1);
+
+    if (cell == null) {
+      return null;
+    }
+
+    if (cell.toString().isEmpty() && vColumn != 16) {
+      JOptionPane.showMessageDialog(null, "Existen celdas vacías");
+      System.exit(0);
+    }
+    try {
+      DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+      return df.format(DateUtil.getJavaDate(cell.getNumericCellValue()));
+    } catch (Exception e) {
+      return null;
+    }
+  }
+
   public void readingHeaders(Sheet sheet, String type) {
     String groupName = null;
     String typeFile = null;
@@ -356,7 +384,7 @@ public class Group {
           JOptionPane.showMessageDialog(null, "No se indica número de comprobante");
           System.exit(0);
         }
-        String date = readCell(sheet, i + j, 12);
+        String date = readCellDate(sheet, i + j, 12);
         String amount = readCellDouble(sheet, i + j, 8);
         Validations.validAmount(amount);
         String description = readCell(sheet, i + j, 6) + " - " + readCell(sheet, i + j, 7);

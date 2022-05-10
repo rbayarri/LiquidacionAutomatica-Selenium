@@ -63,19 +63,27 @@ public class SendEmailTLS {
     }
   }
 
-  public static void sendMessageCBU(Group group) {
-    String message = "";
+  public static void sendMessageCBU(Group group, User user) {
+    String message = "Buen día, no se encuentra en la nómina del Banco Patagonia los siguientes contratados: ";
     for (Liquidacion li : group.getLiquidacionesLiquidadas()) {
       if (li.getResultAutorizacion() != null) {
         LiquidacionContrato l = (LiquidacionContrato) li;
-        message += l.getOp().toString();
-        message += " - ";
-        message += l.getBeneficiary();
-        message += " - ";
-        message += l.getCUIT();
+
+        message += "\nContratado: " + l.getBeneficiary();
+        message += "\nOrden de pago: " + l.getOp().toString();
+        message += "\nCUIT: " + l.getCUIT();
+        message += "\nCantidad de comprobantes: " + l.getInvoices().size();
+        for (Invoice invoice : l.getInvoices()) {
+          message += "\nTipo: " + invoice.getType();
+          message += "\nNúmero: " + invoice.getNumber();
+          message += "\nFecha: " + invoice.getDate();
+        }
         message += "\n";
       }
     }
+    message += "\nPor tanto se excluyen de la liquidación " + group.getGroupName()
+            + ", corresponde solicitar cuentas y anular las ordenes de pago correspondientes."
+            + "La liquidación fue procesada por " + user.getPilagaUser();
     sendMessage("Liquidaciones excluidas por no tener CBU - " + group.getGroupName(), message, true);
   }
 }

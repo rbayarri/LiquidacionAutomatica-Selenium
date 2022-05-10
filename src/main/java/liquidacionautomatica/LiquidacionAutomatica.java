@@ -8,7 +8,6 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import javax.swing.JOptionPane;
-import liquidacionautomatica.entities.SendEmailTLS;
 import liquidacionautomatica.entities.User;
 import liquidacionautomatica.exceptions.CredentialsNotFound;
 
