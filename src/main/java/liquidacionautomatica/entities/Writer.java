@@ -40,17 +40,13 @@ public class Writer {
     String message = "Resumen de las liquidaciones a realizar...\n";
     message += "Nombre del grupo: " + group.getGroupName()
             + "\nExpediente: " + group.getFile().toString();
-    for (Liquidacion li : group.getLiquidaciones()) {
-      message += "\n";
-      message += formatoPesos.format(li.getTotalAmount());
-      message += " - ";
-      if (type.equalsIgnoreCase("Contratos")) {
+    if (type.equalsIgnoreCase("Contratos")) {
+      for (Liquidacion li : group.getLiquidaciones()) {
+        message += "\n";
+        message += formatoPesos.format(li.getTotalAmount());
+        message += " - ";
         LiquidacionContrato liq = (LiquidacionContrato) li;
         message += String.format("%-50s", liq.getBeneficiary());
-      } else {
-        Liquidacion36 liq = (Liquidacion36) li;
-        message += liq.getCompromiso();
-
       }
     }
     message += "\nTotal: ";
