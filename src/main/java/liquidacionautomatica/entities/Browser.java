@@ -159,7 +159,7 @@ public class Browser {
           completeDataOrd36((Liquidacion36) liquidacion);
         }
         completePartidas(liquidacion, form2);
-        finishOP(liquidacion, form3, type);
+        finishOP(liquidacion, form3, type, group.getGroupName());
         otherFilter(form1);
       }
 
@@ -331,18 +331,20 @@ public class Browser {
     }
   }
 
-  private void finishOP(Liquidacion liquidacion, String form, String type) {
+  private void finishOP(Liquidacion liquidacion, String form, String type, String nombreGrupo) {
     driver.findElement(By.id("formulario_toba")).click();
     scrollToEndPage();
     driver.findElement(By.id("ci_" + form + "_procesar")).click();
 
     try {
+      String error = driver.findElement(By.cssSelector(".overlay-mensaje div")).getText().replace("\\n", "").replace("\\", "");
       driver.findElement(By.id("boton_overlay")).click();
       if (type.equals("Contratos")) {
-        liquidacion.setResultLiquidacion(((LiquidacionContrato) liquidacion).getBeneficiary() + " - No se realizó la liquidación");
+        liquidacion.setResultLiquidacion(((LiquidacionContrato) liquidacion).getBeneficiary() + " - " + error);
       } else {
-        liquidacion.setResultLiquidacion(liquidacion.getCompromiso().toString() + " - No se realizó la liquidación");
+        liquidacion.setResultLiquidacion(liquidacion.getCompromiso().toString() + " - " + error);
       }
+      SendEmailTLS.sendMessage("Error en la liquidación del " + nombreGrupo, liquidacion.getResultLiquidacion(), false);
       scrollToEndPage();
       driver.findElement(By.id("ci_" + form + "_cancelar")).click();
       return;

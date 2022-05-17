@@ -49,6 +49,7 @@ public class SendEmailTLS {
       } else {
         message.addRecipient(Message.RecipientType.TO, new InternetAddress(toContratos));
         message.addRecipient(Message.RecipientType.CC, new InternetAddress("msalinas@uncu.edu.ar"));
+        message.addRecipient(Message.RecipientType.CC, new InternetAddress("rfernandez@uncu.edu.ar"));
       }
       message.setSubject(subject);
       message.setText(text + "\n\nNo responder a esta casilla de correo. Este es un mail automático.\nResponder a msalinas@uncu.edu.ar");

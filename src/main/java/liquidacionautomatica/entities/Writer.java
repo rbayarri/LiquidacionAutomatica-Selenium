@@ -42,11 +42,13 @@ public class Writer {
             + "\nExpediente: " + group.getFile().toString();
     if (type.equalsIgnoreCase("Contratos")) {
       for (Liquidacion li : group.getLiquidaciones()) {
-        message += "\n";
-        message += formatoPesos.format(li.getTotalAmount());
-        message += " - ";
-        LiquidacionContrato liq = (LiquidacionContrato) li;
-        message += String.format("%-50s", liq.getBeneficiary());
+        if (li.getOp() == null) {
+          message += "\n";
+          message += formatoPesos.format(li.getTotalAmount());
+          message += " - ";
+          LiquidacionContrato liq = (LiquidacionContrato) li;
+          message += String.format("%-50s", liq.getBeneficiary());
+        }
       }
     }
     message += "\nTotal: ";
