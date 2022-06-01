@@ -362,7 +362,7 @@ public class LiquidacionJFrame extends javax.swing.JFrame {
             this.jLabel24.setEnabled(true);
             browser.differences(group);
             writer.writeLiquidacionesExcluidas(group);
-            SendEmailTLS.sendMessageCBU(group,user);
+            SendEmailTLS.sendMessageCBU(group, user);
           }
           if (this.typeLiquidacion.getSelectedItem().toString().equals("Contratos")) {
             try {
@@ -389,7 +389,8 @@ public class LiquidacionJFrame extends javax.swing.JFrame {
           }
           browser.goToLiquidationsList(group);
           writer.writeForExp(group);
-          JOptionPane.showMessageDialog(null, "Se procesó el grupo con éxito\nDescargar OP y unirlas en un único archivo\nConsultar el archivo con los resultados de la liquidación");
+          writer.writeInstrucciones();
+          JOptionPane.showMessageDialog(null, "CONSULTAR EL ARCHIVO CON LOS RESULTADOS DE LA LIQUIDACIÓN\n\nDescargar OP y unirlas en un único archivo.");
         }
       }
       System.exit(0);

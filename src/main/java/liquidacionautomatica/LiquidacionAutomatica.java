@@ -21,7 +21,7 @@ public class LiquidacionAutomatica {
    * @param args the command line arguments
    */
   public static void main(String[] args) {
-    
+
     User user = null;
     boolean creado = false;
     while (!creado) {

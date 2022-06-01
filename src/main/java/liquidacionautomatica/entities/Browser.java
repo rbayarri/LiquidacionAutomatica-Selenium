@@ -327,6 +327,7 @@ public class Browser {
         driver.findElement(By.id(i + "_ef_form_" + form + "_ppg_altaimporte"))
                 .sendKeys(String.valueOf(rowAvailable));
         leftAmount -= rowAvailable;
+        leftAmount = Math.round(leftAmount * 100.0) / 100.0;
       }
     }
   }
@@ -366,16 +367,6 @@ public class Browser {
     liquidacion.setOp(op);
 
     scrollToEndPage();
-    /*
-      try {
-        driver.findElement(By.id("form_91000016_formulario_boton_imprimir_imprimir")).click();
-        Thread.sleep(5000);
-        driver.switchTo().window(originalWindow);
-      } catch (InterruptedException ex) {
-        JOptionPane.showMessageDialog(null, "La página tarda demasiado en responder. Deberá imprimir con posterioridad las OP generadas");
-        openTabs = false;
-      }
-     */
 
     driver.findElement(By.id("ci_" + form + "_finalizar")).click();
   }
@@ -454,7 +445,6 @@ public class Browser {
     driver.switchTo().window(originalWindow);
     scrollToEndPage();
     driver.findElement(By.id("form_17000058_filtro_filtrar")).click();
-    //vars.remove("groupWindow");
   }
 
   public boolean sameTotal(Group group, char level) {
@@ -472,13 +462,8 @@ public class Browser {
     for (Liquidacion liquidacion : liquidaciones) {
       montoGrupo += liquidacion.getTotalAmount();
     }
-    System.out.println("Total pilagá: " + totalPilaga);
-    System.out.println("Total liquidaciones a retener: " + montoGrupo);
+
     if (totalPilaga != montoGrupo && Math.abs(totalPilaga - montoGrupo) >= 0.01) {
-      /*if (totalPilaga > montoGrupo) {
-        JOptionPane.showMessageDialog(null, "Existen liquidaciones dentro del grupo que no fueron informadas");
-        System.exit(0);
-      }*/
       scrollToStart();
       return false;
     }
