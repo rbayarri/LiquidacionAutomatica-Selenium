@@ -176,5 +176,6 @@ public class Writer {
 
     message += "Si el contratado no tiene cuenta bancaria:\n";
     message += "1) Anular la OPCT generada\n";
+    this.write(message);
   }
 }
