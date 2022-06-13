@@ -39,26 +39,26 @@ public class Browser {
     try {
       System.setProperty("webdriver.chrome.driver", ".\\drivers\\chromedriver.exe");
       ChromeOptions options = new ChromeOptions()
-              .setBinary("C:\\Program Files\\BraveSoftware\\Brave-Browser\\Application\\brave.exe");
+          .setBinary("C:\\Program Files\\BraveSoftware\\Brave-Browser\\Application\\brave.exe");
       this.driver = new ChromeDriver(options);
 
     } catch (Exception e) {
       try {
         ChromeOptions options = new ChromeOptions()
-                .setBinary("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe");
+            .setBinary("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe");
 
         this.driver = new ChromeDriver(options);
       } catch (Exception ex) {
         try {
           ChromeOptions options = new ChromeOptions()
-                  .setBinary("C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe");
+              .setBinary("C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe");
 
           this.driver = new ChromeDriver(options);
         } catch (Exception exc) {
 
           System.setProperty("webdriver.firefox.driver", ".\\drivers\\geckodriver.exe");
           FirefoxOptions options = new FirefoxOptions()
-                  .setBinary("C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe");
+              .setBinary("C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe");
           this.driver = new FirefoxDriver(options);
 
         }
@@ -66,7 +66,7 @@ public class Browser {
     }
 
     this.driver.manage()
-            .window().maximize();
+        .window().maximize();
 
     this.js = (JavascriptExecutor) driver;
   }
@@ -129,15 +129,19 @@ public class Browser {
         lookForCompromiso(liquidacion.getCompromiso(), form1);
         int index = findIndex(liquidacion.getCompromiso());
         if (index == -1) {
-          liquidacion.setResultLiquidacion(((LiquidacionContrato) liquidacion).getBeneficiary() + " - No se encuentra el " + liquidacion.getCompromiso().toString() + " o no tiene saldo");
+          if (type.equals("Contratos")) {
+            liquidacion.setResultLiquidacion(((LiquidacionContrato) liquidacion).getBeneficiary() + " - No se encuentra el " + liquidacion.getCompromiso().toString() + " o no tiene saldo");
+          } else {
+            liquidacion.setResultLiquidacion("No se encuentra el " + liquidacion.getCompromiso() + " o no tiene saldo");
+          }
           SendEmailTLS.sendMessage("Error en la liquidación en " + group.getGroupName(),
-                  liquidacion.getResultLiquidacion(), false);
+              liquidacion.getResultLiquidacion(), false, type);
           otherFilter(form1);
           continue;
         }
         if (!isThereEnoughBalance(liquidacion, index)) {
           SendEmailTLS.sendMessage("Error en la liquidación en " + group.getGroupName(),
-                  liquidacion.getResultLiquidacion(), false);
+              liquidacion.getResultLiquidacion(), false, type);
           otherFilter(form1);
           continue;
         }
@@ -149,7 +153,7 @@ public class Browser {
           } catch (NotMatchBeneficiary e) {
             liquidacion.setResultLiquidacion(e.getMessage());
             SendEmailTLS.sendMessage("Error en la liquidación del " + group.getGroupName(),
-                    liquidacion.getResultLiquidacion(), false);
+                liquidacion.getResultLiquidacion(), false, type);
             scrollToEndPage();
             driver.findElement(By.id("ci_2035_cancelar")).click();
             otherFilter(form1);
@@ -183,9 +187,9 @@ public class Browser {
     driver.findElement(By.id("ef_form_" + numberForm + "_filtro_refdocumento")).click();
     driver.findElement(By.id("ef_form_" + numberForm + "_filtro_refdocumento")).sendKeys(compromiso.getType());
     driver.findElement(By.id("ef_form_" + numberForm + "_filtro_refnumero"))
-            .sendKeys(String.valueOf(compromiso.getNumber()));
+        .sendKeys(String.valueOf(compromiso.getNumber()));
     driver.findElement(By.id("ef_form_" + numberForm + "_filtro_refanio_doc"))
-            .sendKeys(String.valueOf(compromiso.getYear()));
+        .sendKeys(String.valueOf(compromiso.getYear()));
     driver.findElement(By.id("formulario_toba")).click();
     driver.findElement(By.id("form_" + numberForm + "_filtro_ref_filtrar")).click();
   }
@@ -196,8 +200,8 @@ public class Browser {
     if (!filas.isEmpty()) {
       for (int i = 2; i < filas.size() + 2; i++) {
         if (driver.findElement(By.cssSelector(".ei-cuadro-fila:nth-child(" + i
-                + ") > td:nth-child(2)"))
-                .getText().equals(compromiso.toString())) {
+            + ") > td:nth-child(2)"))
+            .getText().equals(compromiso.toString())) {
           return i;
         }
       }
@@ -208,14 +212,14 @@ public class Browser {
   private boolean isThereEnoughBalance(Liquidacion liquidacion, int index) {
 
     Double available = Validations.numberFormat(driver.findElement(By
-            .cssSelector(".ei-cuadro-fila:nth-child(" + index + ") > td:nth-child(5)"))
-            .getText());
+        .cssSelector(".ei-cuadro-fila:nth-child(" + index + ") > td:nth-child(5)"))
+        .getText());
 
     if (available < liquidacion.getTotalAmount()) {
       liquidacion.setResultLiquidacion(((LiquidacionContrato) liquidacion).getBeneficiary() + " - Saldo insuficiente en el "
-              + liquidacion.getCompromiso().toString() + ". Disponible: " + available
-              + ". A liquidar: " + liquidacion.getTotalAmount()
-              + ". Diferencia: " + (liquidacion.getTotalAmount() - available));
+          + liquidacion.getCompromiso().toString() + ". Disponible: " + available
+          + ". A liquidar: " + liquidacion.getTotalAmount()
+          + ". Diferencia: " + (liquidacion.getTotalAmount() - available));
       return false;
     }
     return true;
@@ -232,18 +236,18 @@ public class Browser {
     driver.findElement(By.id("ef_form_84000146_conttipo")).sendKeys(group.getFile().getType());
     driver.findElement(By.id("ef_form_84000146_contnumero")).clear();
     driver.findElement(By.id("ef_form_84000146_contnumero"))
-            .sendKeys(String.valueOf(group.getFile().getNumber()));
+        .sendKeys(String.valueOf(group.getFile().getNumber()));
     driver.findElement(By.id("ef_form_84000146_contanio")).clear();
     driver.findElement(By.id("ef_form_84000146_contanio"))
-            .sendKeys(String.valueOf(group.getFile().getYear()));
+        .sendKeys(String.valueOf(group.getFile().getYear()));
   }
 
   private void completeDataContratos(LiquidacionContrato liquidacion) throws NotMatchBeneficiary {
 
     driver.findElement(By.id("ci_84000215_paso_alta_cambiar_tab_1")).click();
     String newDescription = driver
-            .findElement(By.id("ef_form_84000211_gestiondescripcion"))
-            .getText() + " " + liquidacion.getDescription();
+        .findElement(By.id("ef_form_84000211_gestiondescripcion"))
+        .getText() + " " + liquidacion.getDescription();
     driver.findElement(By.id("ef_form_84000211_gestiondescripcion")).clear();
     driver.findElement(By.id("ef_form_84000211_gestiondescripcion")).sendKeys(newDescription);
 
@@ -251,8 +255,8 @@ public class Browser {
     beneficiary = beneficiary.replace("-", "");
     if (!beneficiary.contains(liquidacion.getCUIT())) {
       throw new NotMatchBeneficiary("Los beneficiarios no coinciden. CUIT a liquidar: "
-              + liquidacion.getCUIT() + ". CUIT del " + liquidacion.getCompromiso().toString()
-              + ": " + beneficiary);
+          + liquidacion.getCUIT() + ". CUIT del " + liquidacion.getCompromiso().toString()
+          + ": " + beneficiary);
     }
     completeInvoices(liquidacion);
   }
@@ -261,8 +265,8 @@ public class Browser {
     driver.findElement(By.id("ci_84000314_paso_alta_cambiar_tab_1")).click();
 
     String newDescripcion = driver
-            .findElement(By.id("ef_form_1537_gestiondescripcion"))
-            .getText() + " " + liquidacion.getDescription();
+        .findElement(By.id("ef_form_1537_gestiondescripcion"))
+        .getText() + " " + liquidacion.getDescription();
     driver.findElement(By.id("ef_form_1537_gestiondescripcion")).clear();
     driver.findElement(By.id("ef_form_1537_gestiondescripcion")).sendKeys(newDescripcion);
     driver.findElement(By.id("ef_form_1537_gestionplan_beca")).click();
@@ -273,7 +277,7 @@ public class Browser {
     driver.switchTo().window(vars.get("dependencyWindow").toString());
     driver.findElement(By.id("ef_form_1000115_pers_filtroup_nombre_n")).click();
     driver.findElement(By
-            .id("ef_form_1000115_pers_filtroup_nombre_n")).sendKeys(liquidacion.getDependency());
+        .id("ef_form_1000115_pers_filtroup_nombre_n")).sendKeys(liquidacion.getDependency());
     driver.findElement(By.cssSelector("u")).click();
     driver.findElement(By.cssSelector("#cuadro_1000112_pers_popup0_seleccion img")).click();
     driver.switchTo().window(originalWindow);
@@ -290,7 +294,7 @@ public class Browser {
       driver.findElement(By.id("js_form_2045_formulario_compr_agregar")).click();
       driver.findElement(By.id((156 + i) + "_ef_form_2045_formulario_comprtipo_de_comprobante")).click();
       driver.findElement(By.id((156 + i) + "_ef_form_2045_formulario_comprtipo_de_comprobante"))
-              .sendKeys(invoices.get(i).getType());
+          .sendKeys(invoices.get(i).getType());
       driver.findElement(By.id((156 + i) + "_ef_form_2045_formulario_comprnumero")).sendKeys(invoices.get(i).getNumber());
       driver.findElement(By.id((156 + i) + "_ef_form_2045_formulario_comprfecha")).sendKeys(invoices.get(i).getDate());
       driver.findElement(By.id((156 + i) + "_ef_form_2045_formulario_comprimporte")).sendKeys(invoices.get(i).getAmount());
@@ -303,29 +307,29 @@ public class Browser {
   private void completePartidas(Liquidacion liquidacion, String form) {
 
     List<WebElement> rowsPartidas = driver.findElements(By
-            .cssSelector("#cuerpo_js_form_" + form + "_ppg_alta > table > tbody > tr"));
+        .cssSelector("#cuerpo_js_form_" + form + "_ppg_alta > table > tbody > tr"));
 
     double leftAmount = liquidacion.getTotalAmount();
 
     for (int i = 0; i < rowsPartidas.size(); i++) {
 
       double rowAvailable = Validations.numberFormat(driver.
-              findElement(By.id(i + "_ef_form_" + form + "_ppg_altasaldo"))
-              .getAttribute("value"));
+          findElement(By.id(i + "_ef_form_" + form + "_ppg_altasaldo"))
+          .getAttribute("value"));
 
       driver.findElement(By.id(i + "_ef_form_" + form + "_ppg_altaimporte")).clear();
 
       if (rowAvailable >= leftAmount) {
 
         driver.findElement(By.id(i + "_ef_form_" + form + "_ppg_altaimporte"))
-                .sendKeys(String.valueOf(leftAmount));
+            .sendKeys(String.valueOf(leftAmount));
         leftAmount = 0;
         break;
 
       } else {
 
         driver.findElement(By.id(i + "_ef_form_" + form + "_ppg_altaimporte"))
-                .sendKeys(String.valueOf(rowAvailable));
+            .sendKeys(String.valueOf(rowAvailable));
         leftAmount -= rowAvailable;
         leftAmount = Math.round(leftAmount * 100.0) / 100.0;
       }
@@ -345,7 +349,7 @@ public class Browser {
       } else {
         liquidacion.setResultLiquidacion(liquidacion.getCompromiso().toString() + " - " + error);
       }
-      SendEmailTLS.sendMessage("Error en la liquidación del " + nombreGrupo, liquidacion.getResultLiquidacion(), false);
+      SendEmailTLS.sendMessage("Error en la liquidación del " + nombreGrupo, liquidacion.getResultLiquidacion(), false, type);
       scrollToEndPage();
       driver.findElement(By.id("ci_" + form + "_cancelar")).click();
       return;
@@ -488,7 +492,7 @@ public class Browser {
       while (!found) {
         try {
           String numberOPPilaga = driver.findElement(By.cssSelector(".ei-cuadro-cc-fondo tbody tr:nth-child(" + (i + 2)
-                  + ") td:nth-child(4)")).getText();
+              + ") td:nth-child(4)")).getText();
           found = true;
           numberOPPilaga = numberOPPilaga.substring(5, numberOPPilaga.indexOf("/"));
           OPPilaga.add(Integer.parseInt(numberOPPilaga));
