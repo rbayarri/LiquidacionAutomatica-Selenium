@@ -123,8 +123,8 @@ public class Group {
   @Override
   public String toString() {
     return "Nombre del grupo: " + this.groupName
-            + "\nExpediente: " + this.file
-            + "\nTipo OP: " + this.typeOP;
+        + "\nExpediente: " + this.file
+        + "\nTipo OP: " + this.typeOP;
   }
 
   public String toStringLiquidaciones() {
@@ -139,7 +139,7 @@ public class Group {
   public String toStringConfirmacion(String type) {
     String message = "Resumen de las liquidaciones a realizar...\n";
     message += "Nombre del grupo: " + this.groupName
-            + "\nExpediente: " + this.file;
+        + "\nExpediente: " + this.file;
     for (Liquidacion li : this.getLiquidaciones()) {
       message += "\n";
       if (type.equalsIgnoreCase("Contratos")) {
@@ -212,6 +212,9 @@ public class Group {
   public String readCell(Sheet sheet, int vRow, int vColumn) {
     Double aux = null;
     Row row = sheet.getRow(vRow);
+    if (row == null) {
+      return null;
+    }
     Cell cell = row.getCell(vColumn - 1);
 
     if (cell == null) {
@@ -411,8 +414,8 @@ public class Group {
     int i = 1;
     while (true) {
       if (CUIT.equals(readCellCuit(sheet, index + i, 2))
-              && numberNUI.equals(readCell(sheet, index + i, 13))
-              && yearNUI.equals(readCell(sheet, index + i, 14))) {
+          && numberNUI.equals(readCell(sheet, index + i, 13))
+          && yearNUI.equals(readCell(sheet, index + i, 14))) {
         quantityInvoices++;
         i++;
       } else {

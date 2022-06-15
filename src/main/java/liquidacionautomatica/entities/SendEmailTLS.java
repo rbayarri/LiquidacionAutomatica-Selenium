@@ -40,17 +40,22 @@ public class SendEmailTLS {
   }
 
   //Compose the message  
-  public static void sendMessage(String subject, String text, boolean intern) {
+  public static void sendMessage(String subject, String text, boolean intern, String type) {
     try {
       MimeMessage message = new MimeMessage(SendEmailTLS.session);
       message.setFrom(new InternetAddress(user + "@uncu.edu.ar"));
-      if (intern) {
-        message.addRecipient(Message.RecipientType.TO, new InternetAddress(toCBU));
+      if (type.equals("Contratos")) {
+        if (intern) {
+          message.addRecipient(Message.RecipientType.TO, new InternetAddress(toCBU));
+        } else {
+          message.addRecipient(Message.RecipientType.TO, new InternetAddress(toContratos));
+          message.addRecipient(Message.RecipientType.CC, new InternetAddress("msalinas@uncu.edu.ar"));
+          message.addRecipient(Message.RecipientType.CC, new InternetAddress("rfernandez@uncu.edu.ar"));
+        }
       } else {
-        message.addRecipient(Message.RecipientType.TO, new InternetAddress(toContratos));
-        message.addRecipient(Message.RecipientType.CC, new InternetAddress("msalinas@uncu.edu.ar"));
-        message.addRecipient(Message.RecipientType.CC, new InternetAddress("rfernandez@uncu.edu.ar"));
+        message.addRecipient(Message.RecipientType.TO, new InternetAddress("lcalanoce@uncu.edu.ar"));
       }
+
       message.setSubject(subject);
       message.setText(text + "\n\nNo responder a esta casilla de correo. Este es un mail automático.\nResponder a msalinas@uncu.edu.ar");
 
@@ -83,8 +88,8 @@ public class SendEmailTLS {
       }
     }
     message += "\nPor tanto se excluyen de la liquidación " + group.getGroupName()
-            + ", corresponde solicitar cuentas y anular las ordenes de pago correspondientes."
-            + "La liquidación fue procesada por " + user.getPilagaUser();
-    sendMessage("Liquidaciones excluidas por no tener CBU - " + group.getGroupName(), message, true);
+        + ", corresponde solicitar cuentas y anular las ordenes de pago correspondientes."
+        + "La liquidación fue procesada por " + user.getPilagaUser();
+    sendMessage("Liquidaciones excluidas por no tener CBU - " + group.getGroupName(), message, true, "Contratos");
   }
 }
