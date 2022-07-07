@@ -156,7 +156,7 @@ public class Writer {
     message += "1) Realizar la liquidación manualmente\n";
     message += "2) Practicar las retenciones que correspondan\n";
     message += "3) Agregar la liquidación al grupo\n";
-    message += "4) Modificar este archivo";
+    message += "4) Modificar este archivo\n";
     message += "  4.1) Cantidad de registros\n";
     message += "  4.2) Total\n";
     message += "  4.3) Total con retenciones\n";
@@ -168,7 +168,7 @@ public class Writer {
     message += "Si el contratado tiene cuenta bancaria:\n";
     message += "1) Practicar las retenciones que correspondan\n";
     message += "2) Agregar la liquidación al grupo\n";
-    message += "3) Modificar este archivo";
+    message += "3) Modificar este archivo\n";
     message += "  3.1) Cantidad de registros\n";
     message += "  3.2) Total\n";
     message += "  3.3) Total con retenciones\n";
