@@ -38,7 +38,8 @@ public class LiquidacionAutomatica {
         }
         FileWriter result;
         try {
-          result = new FileWriter("credenciales.txt");
+          String home = System.getenv("USERPROFILE");
+          result = new FileWriter(home + "\\credenciales.txt");
           BufferedWriter resultWriter = new BufferedWriter(result);
           resultWriter.write(usuarioPilaga + "\n" + clavePilaga);
           resultWriter.close();

@@ -20,9 +20,8 @@ public class User {
   private String pilagaPassword;
 
   public User() throws FileNotFoundException, IOException, CredentialsNotFound {
-    String user = System.getenv("USERNAME");
-    System.out.println(user);
-    FileReader leerArchivoCredenciales = new FileReader("C:\\Users\\" + user + "\\credenciales.txt");
+    String home = System.getenv("USERPROFILE");
+    FileReader leerArchivoCredenciales = new FileReader(home + "\\credenciales.txt");
     BufferedReader contenidoCredenciales = new BufferedReader(leerArchivoCredenciales);
 
     this.pilagaUser = contenidoCredenciales.readLine();
