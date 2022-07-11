@@ -1,11 +1,11 @@
 # Liquidación Automática con Java y Selenium
 
-_Sistema de liquidación automática de contratos de locación de servicios e incentivos al personal._
-_El sistema fue desarrollado para su implementación en la Dirección General de Contabilidad de la Universidad Nacional de Cuyo._
-_El sistema se encarga de leer un archivo excel con extensión .xlsx o .xlsm suministrado por el usuario al momento de ejecutar la aplicación._
-_Posteriormente, el sistema ingresará a una sesión un navegador instalado en la computado (Brave Browser, Google Chrome o Mozilla Firefox) y procederá a ingresar al sistema SIU-Pilagá para realizar las liquidaciones correspondientes._
+Sistema de liquidación automática de contratos de locación de servicios e incentivos al personal.
+El sistema fue desarrollado para su implementación en la Dirección General de Contabilidad de la Universidad Nacional de Cuyo.
+El sistema se encarga de leer un archivo excel con extensión .xlsx o .xlsm suministrado por el usuario al momento de ejecutar la aplicación.
+Posteriormente, el sistema ingresará a una sesión un navegador instalado en la computado (Brave Browser, Google Chrome o Mozilla Firefox) y procederá a ingresar al sistema SIU-Pilagá para realizar las liquidaciones correspondientes.
 
-_Para acceder con éxito al sistema SIU-Diaguita, será necesario encontrase conectado a una red de la Universidad Nacional de Cuyo_
+Para acceder con éxito al sistema SIU-Pilagá, será necesario encontrase conectado a una red de la Universidad Nacional de Cuyo.
 
 ## Tecnologías y herramientas utilizadas: 🛠️
 
@@ -38,14 +38,14 @@ java -jar target/LiquidacionAutomatica-1.0.jar
 
 **Paso 4: Ingresar usuario y clave de SIU-Pilagá (por única vez)** 
 
-_Cuando sea solicitado, completar usuario y clave personal para loguearse al sistema SIU-Pilagá.
+Cuando sea solicitado, completar usuario y clave personal para loguearse al sistema SIU-Pilagá.
 
 
 **Paso 5: Subir el archivo Excel.**
 
-_Subir archivo excel en formato .xlsx o .xlsm que contenga la información necesaria para realizar la liquidación._
+Subir archivo excel en formato .xlsx o .xlsm que contenga la información necesaria para realizar la liquidación.
 
 **Paso 6: Consultar archivo de resultados**
 
-_Una vez finalizado el proceso, en el mismo directorio donde se encuentra el Excel sumistrado, se crea el archivo resultados.txt_
-_El mismo cuenta con la información de la liquidación, números de órdenes de pago, o mensajes de error en caso que no se haya logrado realizar alguna liquidación_
+Una vez finalizado el proceso, en el mismo directorio donde se encuentra el Excel sumistrado, se crea el archivo resultados.txt
+El mismo cuenta con la información de la liquidación, números de órdenes de pago, o mensajes de error en caso que no se haya logrado realizar alguna liquidación
