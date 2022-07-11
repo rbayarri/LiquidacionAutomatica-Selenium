@@ -1,8 +1,11 @@
 # Liquidación Automática con Java y Selenium
 
 Sistema de liquidación automática de contratos de locación de servicios e incentivos al personal.
+
 El sistema fue desarrollado para su implementación en la Dirección General de Contabilidad de la Universidad Nacional de Cuyo.
+
 El sistema se encarga de leer un archivo excel con extensión .xlsx o .xlsm suministrado por el usuario al momento de ejecutar la aplicación.
+
 Posteriormente, el sistema ingresará a una sesión un navegador instalado en la computado (Brave Browser, Google Chrome o Mozilla Firefox) y procederá a ingresar al sistema SIU-Pilagá para realizar las liquidaciones correspondientes.
 
 Para acceder con éxito al sistema SIU-Pilagá, será necesario encontrase conectado a una red de la Universidad Nacional de Cuyo.
@@ -15,7 +18,7 @@ Para acceder con éxito al sistema SIU-Pilagá, será necesario encontrase conec
 * [Apache POI 5.2.2](https://poi.apache.org/)
 * [JavaMail 1.6.2](https://mvnrepository.com/artifact/javax.mail)
 
-## Instalación 🔧
+## Instalación y ejecución 🔧
 
 **Paso 1: Descargar el proyecto**
 
