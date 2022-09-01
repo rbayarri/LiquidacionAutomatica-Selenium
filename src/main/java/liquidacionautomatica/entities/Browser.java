@@ -294,7 +294,7 @@ public class Browser {
       driver.findElement(By.id("js_form_2045_formulario_compr_agregar")).click();
       driver.findElement(By.id((156 + i) + "_ef_form_2045_formulario_comprtipo_de_comprobante")).click();
       driver.findElement(By.id((156 + i) + "_ef_form_2045_formulario_comprtipo_de_comprobante"))
-          .sendKeys(invoices.get(i).getType());
+          .sendKeys(invoices.get(i).getType() + " " + invoices.get(i).getLetter());
       driver.findElement(By.id((156 + i) + "_ef_form_2045_formulario_comprnumero")).sendKeys(invoices.get(i).getNumber());
       driver.findElement(By.id((156 + i) + "_ef_form_2045_formulario_comprfecha")).sendKeys(invoices.get(i).getDate());
       driver.findElement(By.id((156 + i) + "_ef_form_2045_formulario_comprimporte")).sendKeys(invoices.get(i).getAmount());
