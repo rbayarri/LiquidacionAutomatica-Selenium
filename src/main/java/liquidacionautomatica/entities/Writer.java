@@ -39,7 +39,7 @@ public class Writer {
 
     String message = "Resumen de las liquidaciones a realizar...\n";
     message += "Nombre del grupo: " + group.getGroupName()
-            + "\nExpediente: " + group.getFile().toString();
+        + "\nExpediente: " + group.getFile().toString();
     if (type.equalsIgnoreCase("Contratos")) {
       for (Liquidacion li : group.getLiquidaciones()) {
         if (li.getOp() == null) {
@@ -93,6 +93,8 @@ public class Writer {
         message += " - ";
         message += l.getBeneficiary();
         message += " - ";
+        message += l.getSituationAFIP();
+        message += " - ";
         message += l.getCUIT();
         message += "\n";
       }
@@ -105,7 +107,7 @@ public class Writer {
     for (Liquidacion li : group.getLiquidacionesARetener()) {
       if (li.getResultAutorizacion() != null) {
         LiquidacionContrato l = (LiquidacionContrato) li;
-        message += l.getOp().toString() + " - ";
+        message += l.getOp().toString() + " - " + l.getSituationAFIP() + " - ";
         message += String.format("%-50s", l.getBeneficiary()) + " - ";
         message += l.getResultAutorizacion();
         message += "\n";
@@ -146,11 +148,11 @@ public class Writer {
     String message = "\n";
     message += "Instrucciones para resolver problemas\n\n";
     message += "Si el contratado no tiene asignado un número de OPCT,"
-            + " quiere decir que no pudo ser liquidado\n";
+        + " quiere decir que no pudo ser liquidado\n";
     message += "Un mail automático se mandó a contratos@uncu.edu.ar,"
-            + " msalinas@uncu.edu.ar y a rfernandez@uncu.edu.ar informando tal situación\n";
+        + " msalinas@uncu.edu.ar y a rfernandez@uncu.edu.ar informando tal situación\n";
     message += "En el caso que el problema pueda ser solucionado por el liquidador,"
-            + " notificar a los mismos destinatarios para que desestimen el mail automático\n";
+        + " notificar a los mismos destinatarios para que desestimen el mail automático\n";
 
     message += "Si este es el caso se debe proseguir de la siguiente manera:\n";
     message += "1) Realizar la liquidación manualmente\n";
@@ -163,7 +165,7 @@ public class Writer {
     message += "  4.4) Incorporar número de OP y nombre del contratado\n\n";
 
     message += "Si un contratado fue excluido por no tener CBU asignado, "
-            + "se mandó un mail automático a lcalanoce@uncu.edu.ar con los datos necesarios para la consulta en el banco\n";
+        + "se mandó un mail automático a lcalanoce@uncu.edu.ar con los datos necesarios para la consulta en el banco\n";
     message += "El liquidador debe esperar un mail de parte de Luisina indicando la forma de proseguir.\n\n";
     message += "Si el contratado tiene cuenta bancaria:\n";
     message += "1) Practicar las retenciones que correspondan\n";
