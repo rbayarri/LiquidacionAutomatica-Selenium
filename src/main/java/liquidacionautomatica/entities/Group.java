@@ -318,7 +318,7 @@ public class Group {
       Validations.isNumber(listing);
       groupName = "HONORARIOS " + month + " " + listing + " " + year;
       typeFile = readCell(sheet, 3, 2).toUpperCase();
-      if (!typeFile.equals("E_EX")) {
+      if (!typeFile.equals("E_EX") && !typeFile.equals("TRAM")) {
         JOptionPane.showMessageDialog(null, "No se reconoce el tipo de expediente: " + typeFile);
         System.exit(0);
       }
@@ -330,7 +330,7 @@ public class Group {
       String period = readCell(sheet, 0, 1);
 
       groupName = "INCENTIVOS " + period.substring(period.indexOf(' ') + 1);
-      typeFile = "E_EX";
+      typeFile = JOptionPane.showInputDialog("Ingrese tipo de expediente (E_EXP o TRAM)");
       numberFile = JOptionPane.showInputDialog("Ingrese número de expediente");
       yearFile = JOptionPane.showInputDialog("Ingrese año de expediente");
 
