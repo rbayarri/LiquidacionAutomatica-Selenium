@@ -330,7 +330,7 @@ public class Group {
       String period = readCell(sheet, 0, 1);
 
       groupName = "INCENTIVOS " + period.substring(period.indexOf(' ') + 1);
-      typeFile = JOptionPane.showInputDialog("Ingrese tipo de expediente (E_EXP o TRAM)");
+      typeFile = "TRAM";
       numberFile = JOptionPane.showInputDialog("Ingrese número de expediente");
       yearFile = JOptionPane.showInputDialog("Ingrese año de expediente");
 

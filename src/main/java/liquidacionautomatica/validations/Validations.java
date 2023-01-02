@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 /**
- *
  * @author rbayarri
  */
 public class Validations {
@@ -51,7 +50,7 @@ public class Validations {
       JOptionPane.showMessageDialog(null, "El archivo no tiene el formato necesario para ser procesado");
       System.exit(0);
     }
-    if (year != Year.now().getValue() && year != Year.now().getValue() - 1) {
+    if (year != Year.now().getValue() && year != Year.now().getValue() - 1 && year != Year.now().getValue() - 2) {
       JOptionPane.showMessageDialog(null, "El año debe ser igual al año actual o al año anterior");
       System.exit(0);
     }
