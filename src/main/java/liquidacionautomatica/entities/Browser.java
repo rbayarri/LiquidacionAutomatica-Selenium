@@ -565,7 +565,7 @@ public class Browser {
     double monto = li.getTotalAmount();
     if (tax.equals("Ganancias")) {
       order = 1;
-      condition = "Ej. Profesiones liberales u Oficios";
+      condition = "Locacion de Obra o Servicio";
       if (li.getInvoices().get(0).getLetter() == 'A') {
         monto = monto / 1.21;
       }
