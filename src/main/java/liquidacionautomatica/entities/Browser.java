@@ -40,25 +40,27 @@ public class Browser {
       System.setProperty("webdriver.chrome.driver", ".\\drivers\\chromedriver.exe");
       ChromeOptions options = new ChromeOptions()
           .setBinary("C:\\Program Files\\BraveSoftware\\Brave-Browser\\Application\\brave.exe");
+      options.addArguments("--remote-allow-origins=*");
       this.driver = new ChromeDriver(options);
 
     } catch (Exception e) {
       try {
         ChromeOptions options = new ChromeOptions()
             .setBinary("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe");
-
+        options.addArguments("--remote-allow-origins=*");
         this.driver = new ChromeDriver(options);
       } catch (Exception ex) {
         try {
           ChromeOptions options = new ChromeOptions()
               .setBinary("C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe");
-
+        options.addArguments("--remote-allow-origins=*");
           this.driver = new ChromeDriver(options);
         } catch (Exception exc) {
 
           System.setProperty("webdriver.firefox.driver", ".\\drivers\\geckodriver.exe");
           FirefoxOptions options = new FirefoxOptions()
               .setBinary("C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe");
+          options.addArguments("--remote-allow-origins=*");
           this.driver = new FirefoxDriver(options);
 
         }
