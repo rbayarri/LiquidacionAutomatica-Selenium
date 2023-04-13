@@ -19,7 +19,8 @@ public class SendEmailTLS {
   private static final String user = "rbayarri";//change accordingly  
   private static final String password = "contador4uncuyo";//change accordingly  
 
-  private static final String toCBU = "lcalanoce@uncu.edu.ar";//change accordingly   
+  private static final String toCBU = "jdorcemaine@uncu.edu.ar";//change accordingly
+  private static final String toCBU2 = "afernandez@uncu.edu.ar";
   private static final String toContratos = "contratos@uncu.edu.ar";//change accordingly  
 
 //Get the session object  
@@ -47,13 +48,15 @@ public class SendEmailTLS {
       if (type.equals("Contratos")) {
         if (intern) {
           message.addRecipient(Message.RecipientType.TO, new InternetAddress(toCBU));
+          message.addRecipient(Message.RecipientType.CC, new InternetAddress(toCBU2));
         } else {
           message.addRecipient(Message.RecipientType.TO, new InternetAddress(toContratos));
           message.addRecipient(Message.RecipientType.CC, new InternetAddress("msalinas@uncu.edu.ar"));
           message.addRecipient(Message.RecipientType.CC, new InternetAddress("rfernandez@uncu.edu.ar"));
         }
       } else {
-        message.addRecipient(Message.RecipientType.TO, new InternetAddress("lcalanoce@uncu.edu.ar"));
+        // TODO: Verificar quién estará a cargo de incentivos
+        message.addRecipient(Message.RecipientType.TO, new InternetAddress("ypinol@uncu.edu.ar"));
       }
 
       message.setSubject(subject);
