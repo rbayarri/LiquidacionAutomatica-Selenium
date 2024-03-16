@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import javax.swing.JOptionPane;
 import liquidacionautomatica.exceptions.NotMatchBeneficiary;
@@ -512,7 +513,7 @@ public class Browser {
     }
   }
 
-  public void retenerManual(Group group, Double amount2) throws InterruptedException {
+  public void retenerManual(Group group, Optional<Double> amount2) throws InterruptedException {
 
     driver.findElement(By.id("boton_menu_raiz")).click();
     driver.findElement(By.id("buscar_text")).sendKeys("autorizac");
@@ -561,7 +562,7 @@ public class Browser {
     }
   }
 
-  public boolean lineRetencion(String tax, LiquidacionContrato li, double amount2) throws InterruptedException {
+  public boolean lineRetencion(String tax, LiquidacionContrato li, Optional<Double> amount2) throws InterruptedException {
     String condition = null;
     int order = -1;
     double monto = li.getTotalAmount();
@@ -579,11 +580,17 @@ public class Browser {
       if (li.getInvoices().get(0).getLetter() == 'A') {
         monto = monto / 1.21;
       }
-      if (monto > amount2) {
-        condition = "Contratados del Estado Nacional (4%)";
+      
+      if (amount2.isPresent()){
+        if (monto > amount2.get()){
+          condition = "Contratados del Estado Nacional (4%)";
+        } else {
+          condition = "CONTRATADOS ESTADO NACIONAL 2%";
+        }
       } else {
-        condition = "CONTRATADOS ESTADO NACIONAL 2%";
+        condition = "Contratados del Estado Nacional (4%)";
       }
+
     } else {
       li.setResultAutorizacion("No se reconoce el impuesto a retener");
       driver.findElement(By.id("ci_3000141_asignar_retenciones_cancelar")).click();

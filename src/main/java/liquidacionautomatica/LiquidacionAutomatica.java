@@ -4,7 +4,9 @@
  */
 package liquidacionautomatica;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import javax.swing.JOptionPane;
@@ -48,7 +50,22 @@ public class LiquidacionAutomatica {
         }
       }
     }
-    LiquidacionJFrame initialForm = new LiquidacionJFrame(user);
+    
+    String amountUntil2 = "";
+    try {
+      BufferedReader reader = new BufferedReader(new FileReader("retenciones/importe_retencion_hasta_2%.txt"));
+      amountUntil2 = reader.readLine();
+      Double.parseDouble(amountUntil2);
+      System.out.println("Importe máximo a retener 2%: " + amountUntil2);
+    } catch (IOException e) {
+      System.out.println("No se ha seteado importe máximo de retención al 2%.");
+    } catch (NumberFormatException ex){
+      System.out.println("No se ha ingreado un importe válido en el archivo.");
+    } catch (Exception exc){
+      System.out.println("Error inesperado al leer el archivo.");
+    }
+    
+    LiquidacionJFrame initialForm = new LiquidacionJFrame(user, amountUntil2);
     initialForm.setVisible(true);
   }
 }

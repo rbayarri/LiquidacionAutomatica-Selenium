@@ -4,10 +4,12 @@
  */
 package liquidacionautomatica;
 
+import io.opentelemetry.api.internal.StringUtils;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import liquidacionautomatica.entities.Writer;
@@ -35,11 +37,12 @@ public class LiquidacionJFrame extends javax.swing.JFrame {
   public LiquidacionJFrame() {
   }
 
-  public LiquidacionJFrame(User user) {
+  public LiquidacionJFrame(User user, String amountUntil2) {
     initComponents();
     this.typeLiquidacion.addItem("Contratos");
     this.typeLiquidacion.addItem("Ordenanaza 36");
     this.user = user;
+    this.amountUntil2.setText(amountUntil2);
   }
 
   /**
@@ -77,6 +80,7 @@ public class LiquidacionJFrame extends javax.swing.JFrame {
     jLabel24 = new javax.swing.JLabel();
     jLabel25 = new javax.swing.JLabel();
     jCheckBox1 = new javax.swing.JCheckBox();
+    jLabel5 = new javax.swing.JLabel();
 
     setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
     setTitle("Liquidación Automática");
@@ -106,7 +110,6 @@ public class LiquidacionJFrame extends javax.swing.JFrame {
 
     jLabel7.setText("Monto máximo de retención al 2%:");
 
-    amountUntil2.setText("38000");
     amountUntil2.setToolTipText("");
 
     jLabel9.setText("<html><p style=\"font-weight: bold;text-decoration:underline\">Pasos previos Contratos:</p></html>");
@@ -153,6 +156,16 @@ public class LiquidacionJFrame extends javax.swing.JFrame {
 
     jCheckBox1.setText("Grupo creado");
 
+    jLabel5.setForeground(new java.awt.Color(51, 153, 0));
+    jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+    jLabel5.setText("+ INFO");
+    jLabel5.setToolTipText("<html>\n<ul>\n<li>Completar con el importe hasta el cuál se retendrá 2%. Aquellos que superen el importe, se retendrán al 4%</li>\n<li>Dejar vacío o 0 (cero) para retener al 4%</li>\n<li>Para dejar un importe fijo, agregar el mismo a la primera línea del archivo <code>retenciones/importe_retencion_hasta_2%.txt</code></li>\n</ul>\n</html>");
+    jLabel5.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+    jLabel5.setMaximumSize(new java.awt.Dimension(50, 25));
+    jLabel5.setMinimumSize(new java.awt.Dimension(50, 25));
+    jLabel5.setOpaque(true);
+    jLabel5.setPreferredSize(new java.awt.Dimension(25, 25));
+
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
     getContentPane().setLayout(layout);
     layout.setHorizontalGroup(
@@ -163,26 +176,25 @@ public class LiquidacionJFrame extends javax.swing.JFrame {
             .addGap(40, 40, 40)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
               .addGroup(layout.createSequentialGroup()
-                .addComponent(jLabel1)
-                .addGap(18, 18, 18)
-                .addComponent(typeLiquidacion, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE))
-              .addGroup(layout.createSequentialGroup()
-                .addComponent(jLabel7)
-                .addGap(18, 18, 18)
-                .addComponent(amountUntil2, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
-              .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                  .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                   .addComponent(jLabel4)
-                  .addComponent(jLabel2)
                   .addComponent(jLabel10)
                   .addComponent(jLabel11)
                   .addComponent(jLabel15)
                   .addComponent(jLabel12)
                   .addComponent(jLabel13)
                   .addComponent(jLabel14)
-                  .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(52, 52, 52)
+                  .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                  .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                  .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                      .addComponent(jLabel7)
+                      .addGap(18, 18, 18)
+                      .addComponent(amountUntil2, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                      .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                      .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING)))
+                .addGap(70, 70, 70)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                   .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                   .addComponent(jLabel19)
@@ -192,7 +204,11 @@ public class LiquidacionJFrame extends javax.swing.JFrame {
                   .addComponent(jLabel24)
                   .addComponent(jLabel23)
                   .addComponent(jLabel25)
-                  .addComponent(jLabel22)))))
+                  .addComponent(jLabel22)))
+              .addGroup(layout.createSequentialGroup()
+                .addComponent(jLabel1)
+                .addGap(18, 18, 18)
+                .addComponent(typeLiquidacion, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE))))
           .addGroup(layout.createSequentialGroup()
             .addGap(32, 32, 32)
             .addComponent(jCheckBox1))
@@ -201,7 +217,7 @@ public class LiquidacionJFrame extends javax.swing.JFrame {
             .addComponent(liquidar, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGap(18, 18, 18)
             .addComponent(cancel, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)))
-        .addContainerGap(84, Short.MAX_VALUE))
+        .addContainerGap(162, Short.MAX_VALUE))
     );
     layout.setVerticalGroup(
       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -213,9 +229,11 @@ public class LiquidacionJFrame extends javax.swing.JFrame {
         .addGap(18, 18, 18)
         .addComponent(jCheckBox1)
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-          .addComponent(jLabel7)
-          .addComponent(amountUntil2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+          .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+          .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+            .addComponent(jLabel7)
+            .addComponent(amountUntil2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
         .addGap(18, 18, 18)
         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
           .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -256,7 +274,7 @@ public class LiquidacionJFrame extends javax.swing.JFrame {
         .addComponent(jLabel13)
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
         .addComponent(jLabel14)
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
           .addComponent(liquidar, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
           .addComponent(cancel, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -275,10 +293,11 @@ public class LiquidacionJFrame extends javax.swing.JFrame {
     private void liquidarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_liquidarActionPerformed
 
       this.jLabel19.setEnabled(true);
-      Double amount2;
+      Optional<Double> amount2;
       String directory = null;
       try {
-        amount2 = Double.parseDouble(this.amountUntil2.getText());
+        amount2 = StringUtils.isNullOrEmpty(this.amountUntil2.getText())? 
+            Optional.of(Double.parseDouble(this.amountUntil2.getText())) : Optional.empty();
       } catch (NumberFormatException e) {
         JOptionPane.showMessageDialog(null, "El formato indicado no es válido");
         return;
@@ -463,6 +482,7 @@ public class LiquidacionJFrame extends javax.swing.JFrame {
   private javax.swing.JLabel jLabel25;
   private javax.swing.JLabel jLabel3;
   private javax.swing.JLabel jLabel4;
+  private javax.swing.JLabel jLabel5;
   private javax.swing.JLabel jLabel7;
   private javax.swing.JLabel jLabel9;
   private javax.swing.JButton liquidar;
