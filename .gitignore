@@ -4,6 +4,8 @@ build/
 nbbuild/
 dist/
 nbdist/
+.idea/
+*credenciales.txt
 nbactions.xml
 nb-configuration.xml
 

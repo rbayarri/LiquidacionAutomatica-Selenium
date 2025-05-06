@@ -1,8 +1,5 @@
 package liquidacionautomatica;
 
-import liquidacionautomatica.entities.Group;
-import org.openqa.selenium.By;
-
 public class HtmlElement {
 
     public static final String PILAGA_URL = "http://pilaga.intranet.uncu.edu.ar/siu/pilaga/";
