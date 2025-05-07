@@ -1,7 +1,6 @@
 package liquidacionautomatica;
 
 import io.opentelemetry.api.internal.StringUtils;
-import liquidacionautomatica.entities.Writer;
 import liquidacionautomatica.entities.*;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -10,10 +9,10 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.*;
 import java.util.Objects;
+import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import static liquidacionautomatica.HtmlElement.WAITING_TIME_AFTER_LOGIN;
+import java.util.logging.SimpleFormatter;
 
 /**
  * @author rbayarri
@@ -391,7 +390,7 @@ public class LiquidacionJFrame extends javax.swing.JFrame {
         Double amount2;
 
         try {
-            amount2 = StringUtils.isNullOrEmpty(this.amountUntil2.getText()) ? Double.parseDouble(this.amountUntil2.getText()) : null;
+            amount2 = StringUtils.isNullOrEmpty(this.amountUntil2.getText()) ? null : Double.parseDouble(this.amountUntil2.getText());
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "El formato indicado no es válido");
             return;
@@ -419,11 +418,34 @@ public class LiquidacionJFrame extends javax.swing.JFrame {
         group.setTypeOP(browser.getTypeOp());
         group.setLiquidaciones(reader.getLiquidaciones(sheet));
 
-        Writer writer = new Writer(group, directory);
+        OperationWriter writer = new OperationWriter(group, directory);
         writer.writeFirstRead(group);
 
+        Logger rootLogger = Logger.getLogger("");
+        try {
+            // Create a FileHandler to write logs to the specified file
+            FileHandler fileHandler = new FileHandler(String.format("%s%soutput-%s.txt", directory, File.separator,  group.getGroupName()), true); // Append mode
+            fileHandler.setFormatter(new SimpleFormatter()); // Use a simple text format
+
+            // Add the FileHandler to the root logger
+            rootLogger.addHandler(fileHandler);
+
+            // Optionally, remove the default console handler
+            rootLogger.setUseParentHandlers(false);
+
+            // Redirect System.out and System.err to the same file
+            PrintStream fileOut = new PrintStream(new FileOutputStream(String.format("%s%soutput-%s.txt", directory, File.separator, group.getGroupName()), true));
+            System.setOut(fileOut);
+            System.setErr(fileOut);
+            System.out.printf("Configuración: %s%n", HtmlElement.INSTANCE.isLocal()? "local" : "server");
+        } catch (FileNotFoundException e) {
+            System.out.println("Error opening file: " + e.getMessage());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         if (JOptionPane.showConfirmDialog(null,
-                writer.writeFirstReadConfirmation(group), "¿Continuar?", JOptionPane.YES_NO_OPTION) != JOptionPane.YES_NO_OPTION) {
+                writeFirstReadConfirmation(group), "¿Continuar?", JOptionPane.YES_NO_OPTION) != JOptionPane.YES_NO_OPTION) {
             return;
         }
 
@@ -473,5 +495,23 @@ public class LiquidacionJFrame extends javax.swing.JFrame {
         writer.writeForExp(group);
         writer.writeInstrucciones();
         JOptionPane.showMessageDialog(null, "CONSULTAR EL ARCHIVO CON LOS RESULTADOS DE LA LIQUIDACIÓN\n\nDescargar OP y unirlas en un único archivo.");
+
+        writer.closeWriters();
+    }
+
+    private String writeFirstReadConfirmation(Group group) {
+
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("Resumen de las liquidaciones a realizar...\n");
+        sb.append("Nombre del grupo: " + group.getGroupName()
+                + "\nExpediente: " + group.getFile().toString());
+        for (Liquidation li : group.getLiquidaciones()) {
+            sb.append(li.getMessage());
+        }
+        sb.append("\nTotal: ");
+        sb.append(Utils.toCurrencyFormat(group.getTotalAmount()));
+
+        return sb.toString();
     }
 }

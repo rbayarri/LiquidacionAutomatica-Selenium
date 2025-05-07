@@ -92,29 +92,29 @@ public abstract class Browser {
     }
 
     public void goToPilaga() {
-        driver.get(PILAGA_URL);
+        driver.get(INSTANCE.pilagaUrl);
         this.originalWindow = driver.getWindowHandle();
     }
 
     public void loginPilaga(User user) {
-        WebElement userInput = driver.findElement(By.id(LOGIN_USER_INPUT));
+        WebElement userInput = driver.findElement(By.id(INSTANCE.loginUserInput));
         userInput.click();
         userInput.sendKeys(user.getPilagaUser());
-        WebElement passwordInput = driver.findElement(By.id(LOGIN_PASSWORD_INPUT));
+        WebElement passwordInput = driver.findElement(By.id(INSTANCE.loginPasswordInput));
         passwordInput.click();
         passwordInput.sendKeys(user.getPilagaPassword());
-        driver.findElement(By.cssSelector(CSS_LOGIN_BUTTON)).click();
+        driver.findElement(By.cssSelector(INSTANCE.cssLoginButton)).click();
         try {
-            driver.findElement(By.cssSelector(CSS_LOGIN_OTHER_ENTITY)).click();
+            driver.findElement(By.cssSelector(INSTANCE.cssLoginOtherEntity)).click();
         } catch (NoSuchElementException ignored) {
         }
         try {
-            driver.findElement(By.id(ERROR_BUTTON)).click();
+            driver.findElement(By.id(INSTANCE.errorButton)).click();
             JOptionPane.showMessageDialog(null, "El usuario y/o clave de pilagá son incorrectos");
             System.exit(0);
         } catch (NoSuchElementException ignored) {
         }
-        wait(WAITING_TIME_AFTER_LOGIN);
+        wait(INSTANCE.waitingTimeAfterLogin);
         this.js.executeScript("document.body.style.zoom='70%'");
     }
 
@@ -124,7 +124,7 @@ public abstract class Browser {
             System.out.println("Total amount: " + liquidation.getTotalAmount());
             if (liquidation.getOp() == null) {
                 lookForCompromiso(liquidation.getCompromiso());
-                wait(WAITING_TIME_AFTER_LOOK_FOR_COMPROMISO);
+                wait(INSTANCE.waitingTimeAfterLookForCompromiso);
                 int index = findIndex(liquidation.getCompromiso());
                 if (index == -1) {
                     liquidation.setResultLiquidacion(liquidation.getCompromisoNotFoundMessage());
@@ -136,50 +136,49 @@ public abstract class Browser {
                     continue;
                 }
                 selectRow(index);
-                wait(WAITING_TIME_AFTER_ROW_SELECTION);
+                wait(INSTANCE.waitingTimeAfterRowSelection);
                 completeData(group);
                 try {
                     completeSpecificData(liquidation);
                 } catch (NotMatchBeneficiary e) {
                     liquidation.setResultLiquidacion(e.getMessage());
                     scrollToEndPage();
-                    driver.findElement(By.id(CANCEL_NEW)).click();
+                    driver.findElement(By.id(INSTANCE.cancelNew)).click();
                     otherFilter();
                     continue;
                 }
-                wait(WAITING_TIME_TO_COMPLETE_PARTIDAS);
+                wait(INSTANCE.waitingTimeToCompletePartidas);
                 completePartidas(liquidation);
                 finishOP(liquidation);
-                wait(WAITING_TIME_AFTER_FINISH_OP);
+                wait(INSTANCE.waitingTimeAfterFinishOp);
                 otherFilter();
             }
 
             if (liquidation.getOp() != null) {
                 liquidation.setResultLiquidacion(liquidation.getSuccessLiquidationMessage());
                 group.addLiquidacionLiquidada(liquidation);
-                // todo: ver si se puede agregar la op en el excel
             }
         }
     }
 
     private void lookForCompromiso(Compromiso compromiso) {
-        WebElement document = driver.findElement(By.id(String.format(DOCUMENT_INPUT, getForm1())));
+        WebElement document = driver.findElement(By.id(String.format(INSTANCE.documentInput, getForm1())));
         document.click();
         document.sendKeys(compromiso.getType());
-        driver.findElement(By.id(String.format(DOCUMENT_NUMBER_INPUT, getForm1())))
+        driver.findElement(By.id(String.format(INSTANCE.documentNumberInput, getForm1())))
                 .sendKeys(String.valueOf(compromiso.getNumber()));
-        driver.findElement(By.id(String.format(DOCUMENT_YEAR_INPUT, getForm1())))
+        driver.findElement(By.id(String.format(INSTANCE.documentYearInput, getForm1())))
                 .sendKeys(String.valueOf(compromiso.getYear()));
-        driver.findElement(By.id(TOBA_FORM)).click();
-        driver.findElement(By.id(String.format(FILTER_BUTTON, getForm1()))).click();
+        driver.findElement(By.id(INSTANCE.tobaForm)).click();
+        driver.findElement(By.id(String.format(INSTANCE.filterButton, getForm1()))).click();
     }
 
     private int findIndex(Compromiso compromiso) {
-        List<WebElement> filas = driver.findElements(By.cssSelector(CSS_ELEMENTS_FOUND));
+        List<WebElement> filas = driver.findElements(By.cssSelector(INSTANCE.cssElementsFound));
         System.out.println("Filas: " + filas.size());
         if (!filas.isEmpty()) {
             for (int i = 2; i < filas.size() + 2; i++) {
-                String nuiFound = driver.findElement(By.cssSelector(String.format(CSS_COMPROMISOS_FOUND_ROW, i))).getText();
+                String nuiFound = driver.findElement(By.cssSelector(String.format(INSTANCE.cssCompromisosFoundRow, i))).getText();
                 System.out.println("NUI encontrado: " + nuiFound);
                 System.out.println("NUI buscado: " + compromiso.toString());
                 if (nuiFound.equals(compromiso.toString())) {
@@ -195,7 +194,7 @@ public abstract class Browser {
     private boolean isThereEnoughBalance(Liquidation liquidation, int index) {
 
         double available = Validations.numberFormat(driver.findElement(By
-                        .cssSelector(String.format(CSS_COMPROMISO_ROW, index)))
+                        .cssSelector(String.format(INSTANCE.cssCompromisoRow, index)))
                 .getText());
 
         if (available < liquidation.getTotalAmount()) {
@@ -206,20 +205,20 @@ public abstract class Browser {
     }
 
     private void selectRow(int index) {
-        driver.findElement(By.id(String.format(ROW_SELECTION, index - 2))).click();
+        driver.findElement(By.id(String.format(INSTANCE.rowSelection, index - 2))).click();
     }
 
     private void completeData(Group group) {
-        WebElement opType = driver.findElement(By.id(OP_TYPE_INPUT));
+        WebElement opType = driver.findElement(By.id(INSTANCE.opTypeInput));
         opType.click();
         opType.sendKeys(group.getTypeOP());
-        WebElement fileType = driver.findElement(By.id(FILE_TYPE_INPUT));
+        WebElement fileType = driver.findElement(By.id(INSTANCE.fileTypeInput));
         fileType.click();
         fileType.sendKeys(group.getFile().getType());
-        WebElement fileNumber = driver.findElement(By.id(FILE_NUMBER_INPUT));
+        WebElement fileNumber = driver.findElement(By.id(INSTANCE.fileNumberInput));
         fileNumber.clear();
         fileNumber.sendKeys(String.valueOf(group.getFile().getNumber()));
-        WebElement fileYear = driver.findElement(By.id(FILE_YEAR_INPUT));
+        WebElement fileYear = driver.findElement(By.id(INSTANCE.fileYearInput));
         fileYear.clear();
         fileYear.sendKeys(String.valueOf(group.getFile().getYear()));
     }
@@ -227,17 +226,17 @@ public abstract class Browser {
     private void completePartidas(Liquidation liquidation) {
 
         List<WebElement> rowsPartidas = driver.findElements(By
-                .cssSelector(String.format(CSS_PARTIDAS_ROWS, getForm2())));
+                .cssSelector(String.format(INSTANCE.cssPartidasRows, getForm2())));
 
         double leftAmount = liquidation.getTotalAmount();
 
         for (int i = 0; i < rowsPartidas.size(); i++) {
 
             double rowAvailable = Validations.numberFormat(driver.
-                    findElement(By.id(String.format(AVAILABLE_PARTIDA_ROW, i, getForm2())))
+                    findElement(By.id(String.format(INSTANCE.availablePartidaRow, i, getForm2())))
                     .getAttribute("value"));
 
-            WebElement amountPartidaRow = driver.findElement(By.id(String.format(AMOUNT_PARTIDA_ROW, i, getForm2())));
+            WebElement amountPartidaRow = driver.findElement(By.id(String.format(INSTANCE.amountPartidaRow, i, getForm2())));
             amountPartidaRow.clear();
 
             if (rowAvailable >= leftAmount) {
@@ -253,23 +252,23 @@ public abstract class Browser {
     }
 
     private void finishOP(Liquidation liquidation) {
-        driver.findElement(By.id(TOBA_FORM)).click();
+        driver.findElement(By.id(INSTANCE.tobaForm)).click();
         scrollToEndPage();
-        driver.findElement(By.id(String.format(PROCESS_BUTTON, getForm3()))).click();
+        driver.findElement(By.id(String.format(INSTANCE.processButton, getForm3()))).click();
 
         try {
-            String error = driver.findElement(By.cssSelector(CSS_ERROR_PROCESS)).getText().replace("\\n", "").replace("\\", "");
-            driver.findElement(By.id(ERROR_BUTTON)).click();
+            String error = driver.findElement(By.cssSelector(INSTANCE.cssErrorProcess)).getText().replace("\\n", "").replace("\\", "");
+            driver.findElement(By.id(INSTANCE.errorButton)).click();
             liquidation.setResultLiquidacion(liquidation.getErrorLiquitationMessage(error));
             scrollToEndPage();
-            driver.findElement(By.id(String.format(CANCEL_BUTTON, getForm3()))).click();
+            driver.findElement(By.id(String.format(INSTANCE.cancelButton, getForm3()))).click();
             return;
         } catch (NoSuchElementException ignored) {
         }
 
-        wait(WAITING_TIME_AFTER_PROCESS_LIQUIDATION);
+        wait(INSTANCE.waitingTimeAfterProcessLiquidation);
 
-        String opGenerated = driver.findElement(By.id(MAIN_DOC)).getText();
+        String opGenerated = driver.findElement(By.id(INSTANCE.mainDoc)).getText();
         String typeOP = opGenerated.substring(3, 7);
         String numberOP = opGenerated.substring(8, opGenerated.indexOf("/"));
         String yearOP = opGenerated.substring(opGenerated.indexOf("/") + 1);
@@ -283,13 +282,13 @@ public abstract class Browser {
 
         liquidation.setOp(op);
         scrollToEndPage();
-        driver.findElement(By.id(String.format(FINISH_BUTTON, getForm3()))).click();
+        driver.findElement(By.id(String.format(INSTANCE.finishButton, getForm3()))).click();
     }
 
     private void otherFilter() {
-        driver.findElement(By.id(String.format(COLLAPSE_FILTER_BUTTON, getForm1()))).click();
-        driver.findElement(By.id(String.format(DOCUMENT_NUMBER_INPUT, getForm1()))).clear();
-        driver.findElement(By.id(String.format(DOCUMENT_YEAR_INPUT, getForm1()))).clear();
+        driver.findElement(By.id(String.format(INSTANCE.collapseFilterButton, getForm1()))).click();
+        driver.findElement(By.id(String.format(INSTANCE.documentNumberInput, getForm1()))).clear();
+        driver.findElement(By.id(String.format(INSTANCE.documentYearInput, getForm1()))).clear();
     }
 
     public void createGroup(Group group) {
@@ -299,19 +298,19 @@ public abstract class Browser {
         markCvuCheckIfNeeded();
 
         scrollToEndPage();
-        driver.findElement(By.id(LIQUIDATION_FILTER_GROUP_BUTTON)).click();
-        wait(WAITING_TIME_AFTER_FILTERING);
-        driver.findElement(By.id(COLLAPSE_FILTER_GROUP_BUTTON)).click();
+        driver.findElement(By.id(INSTANCE.liquidationFilterGroupButton)).click();
+        wait(INSTANCE.waitingTimeAfterFiltering);
+        driver.findElement(By.id(INSTANCE.collapseFilterGroupButton)).click();
         try {
-            driver.findElement(By.id(GROUP_NAME_INPUT)).sendKeys(group.getGroupName());
-            driver.findElement(By.id(SELECT_ALL_GROUP_CHECK)).click();
-            driver.findElement(By.id(ADD_LIQUIDATION_TO_GROUP)).click();
+            driver.findElement(By.id(INSTANCE.groupNameInput)).sendKeys(group.getGroupName());
+            driver.findElement(By.id(INSTANCE.selectAllGroupCheck)).click();
+            driver.findElement(By.id(INSTANCE.addLiquidationToGroup)).click();
         } catch (NoSuchElementException e) {
             JOptionPane.showMessageDialog(null, "No existen liquidaciones en nivel 4 para realizar el grupo");
             System.exit(0);
         }
         try {
-            driver.findElement(By.id(ERROR_BUTTON)).click();
+            driver.findElement(By.id(INSTANCE.errorButton)).click();
             JOptionPane.showMessageDialog(null, "El grupo ya se encuentra creado");
             System.exit(0);
         } catch (NoSuchElementException ignored) {
@@ -319,58 +318,58 @@ public abstract class Browser {
     }
 
     private void goToCreateGroup() {
-        driver.findElement(By.id(ROOT_BUTTON)).click();
-        driver.findElement(By.id(SEARCH_INPUT)).sendKeys("grupo");
-        driver.findElement(By.id(NEW_GROUP_BUTTON)).click();
-        wait(WAITING_TIME_AFTER_PROCESS_LIQUIDATION);
+        driver.findElement(By.id(INSTANCE.rootButton)).click();
+        driver.findElement(By.id(INSTANCE.searchInput)).sendKeys("grupo");
+        driver.findElement(By.id(INSTANCE.newGroupButton)).click();
+        wait(INSTANCE.waitingTimeAfterProcessLiquidation);
     }
 
     private void completeDataFileCreateGroup(Group group) {
-        WebElement opTypeInput = driver.findElement(By.id(TYPE_OP_GROUP_INPUT));
+        WebElement opTypeInput = driver.findElement(By.id(INSTANCE.typeOpGroupInput));
         opTypeInput.click();
         opTypeInput.sendKeys(group.getTypeOP());
-        WebElement fileTypeInput = driver.findElement(By.id(FILE_TYPE_GROUP_INPUT));
+        WebElement fileTypeInput = driver.findElement(By.id(INSTANCE.fileTypeGroupInput));
         fileTypeInput.click();
         fileTypeInput.sendKeys(group.getFile().getType());
-        driver.findElement(By.id(FILE_NUMBER_GROUP_INPUT)).sendKeys(String.valueOf(group.getFile().getNumber()));
-        driver.findElement(By.id(FILE_YEAR_GROUP_INPUT)).sendKeys(String.valueOf(group.getFile().getYear()));
-        WebElement opLevelInput = driver.findElement(By.id(LEVEL_FROM_GROUP_INPUT));
+        driver.findElement(By.id(INSTANCE.fileNumberGroupInput)).sendKeys(String.valueOf(group.getFile().getNumber()));
+        driver.findElement(By.id(INSTANCE.fileYearGroupInput)).sendKeys(String.valueOf(group.getFile().getYear()));
+        WebElement opLevelInput = driver.findElement(By.id(INSTANCE.levelFromGroupInput));
         opLevelInput.click();
         opLevelInput.sendKeys("Nivel 4");
     }
 
     public void goToLevel4GroupAuthorization() {
-        driver.findElement(By.id(ROOT_BUTTON)).click();
-        driver.findElement(By.id(SEARCH_INPUT)).sendKeys("grupo");
-        driver.findElement(By.id(LEVEL_4_GROUP_AUTHORIZATION)).click();
-        wait(WAITING_TIME_AFTER_PROCESS_LIQUIDATION);
+        driver.findElement(By.id(INSTANCE.rootButton)).click();
+        driver.findElement(By.id(INSTANCE.searchInput)).sendKeys("grupo");
+        driver.findElement(By.id(INSTANCE.level4GroupAuthorization)).click();
+        wait(INSTANCE.waitingTimeAfterProcessLiquidation);
     }
 
     public void goToLevel7GroupAuthorization() {
-        driver.findElement(By.id(ROOT_BUTTON)).click();
-        driver.findElement(By.id(SEARCH_INPUT)).sendKeys("grupo");
-        driver.findElement(By.id(LEVEL_7_GROUP_AUTHORIZATION)).click();
-        wait(WAITING_TIME_AFTER_PROCESS_LIQUIDATION);
+        driver.findElement(By.id(INSTANCE.rootButton)).click();
+        driver.findElement(By.id(INSTANCE.searchInput)).sendKeys("grupo");
+        driver.findElement(By.id(INSTANCE.level7GroupAuthorization)).click();
+        wait(INSTANCE.waitingTimeAfterProcessLiquidation);
     }
 
     public void filterGroup(Group group) {
-        driver.findElement(By.id(GROUP_SELECTION_AUTHORIZATION_INPUT)).click();
-        vars.put("groupWindow", waitForWindow(WAITING_TIME_TO_FILTER_GROUP_LIQUIDATIONS_LEVEL_4));
+        driver.findElement(By.id(INSTANCE.groupSelectionAuthorizationInput)).click();
+        vars.put("groupWindow", waitForWindow(INSTANCE.waitingTimeToFilterGroupLiquidationsLevel4));
         driver.switchTo().window(vars.get("groupWindow").toString());
 
-        driver.findElement(By.id(GROUP_NAME_INPUT_SELECTION_GROUP_WINDOW)).sendKeys(group.getGroupName());
-        driver.findElement(By.id(FILTER_GROUP_WINDOW_BUTTON)).click();
-        driver.findElement(By.id(SELECT_GROUP_WINDOW_BUTTON)).click();
+        driver.findElement(By.id(INSTANCE.groupNameInputSelectionGroupWindow)).sendKeys(group.getGroupName());
+        driver.findElement(By.id(INSTANCE.filterGroupWindowButton)).click();
+        driver.findElement(By.id(INSTANCE.selectGroupWindowButton)).click();
 
         driver.switchTo().window(originalWindow);
         scrollToEndPage();
-        driver.findElement(By.id(FILTER_BUTTON_LEVEL_4_GROUP_AUTHORIZATION)).click();
+        driver.findElement(By.id(INSTANCE.filterButtonLevel4GroupAuthorization)).click();
     }
 
     public boolean sameTotal(Group group, char level) {
 
         scrollToEndPage();
-        double totalPilaga = Validations.numberFormat(driver.findElement(By.cssSelector(CSS_LEVEL_TOTAL)).getText());
+        double totalPilaga = Validations.numberFormat(driver.findElement(By.cssSelector(INSTANCE.cssLevelTotal)).getText());
         double montoGrupo = 0;
         List<Liquidation> liquidaciones;
         if (level == '4') {
@@ -396,18 +395,18 @@ public abstract class Browser {
         goToCreateGroup();
         completeDataFileCreateGroup(group);
         scrollToEndPage();
-        driver.findElement(By.id(LIQUIDATION_FILTER_GROUP_BUTTON)).click();
-        driver.findElement(By.id(COLLAPSE_FILTER_GROUP_BUTTON)).click();
+        driver.findElement(By.id(INSTANCE.liquidationFilterGroupButton)).click();
+        driver.findElement(By.id(INSTANCE.collapseFilterGroupButton)).click();
 
         List<Integer> op = new ArrayList<>();
 
-        List<WebElement> opRows = driver.findElements(By.cssSelector(CSS_ELEMENTS_FOUND));
+        List<WebElement> opRows = driver.findElements(By.cssSelector(INSTANCE.cssElementsFound));
 
         for (int i = 0; i < opRows.size(); i++) {
             boolean found = false;
             while (!found) {
                 try {
-                    String opNumber = driver.findElement(By.cssSelector(String.format(CSS_OP_COLUMN_LEVEL_4_GROUP_AUTHORIZATION, i + 2))).getText();
+                    String opNumber = driver.findElement(By.cssSelector(String.format(INSTANCE.cssOpColumnLevel4GroupAuthorization, i + 2))).getText();
                     found = true;
                     opNumber = opNumber.substring(5, opNumber.indexOf("/"));
                     op.add(Integer.parseInt(opNumber));
@@ -429,28 +428,28 @@ public abstract class Browser {
     protected void makeGroupRetention() {
 
         try {
-            driver.findElement(By.id(SELECT_ALL_LEVEL_4_GROUP)).click();
+            driver.findElement(By.id(INSTANCE.selectAllLevel4Group)).click();
             scrollToEndPage();
-            driver.findElement(By.id(PROCESS_LEVEL_4_AUTHORIZATION_GROUP)).click();
+            driver.findElement(By.id(INSTANCE.processLevel4AuthorizationGroup)).click();
             wait(500);
-            driver.findElement(By.id(ERROR_BUTTON)).click();
+            driver.findElement(By.id(INSTANCE.errorButton)).click();
         } catch (NoSuchElementException ignored) {
         }
 
     }
 
     public void goToLiquidationsList(Group group) {
-        driver.findElement(By.id(ROOT_BUTTON)).click();
-        driver.findElement(By.id(SEARCH_INPUT)).sendKeys("listado de liquidaciones");
-        driver.findElement(By.id(LIQUIDATION_LIST)).click();
-        wait(WAITING_TIME_AFTER_PROCESS_LIQUIDATION);
+        driver.findElement(By.id(INSTANCE.rootButton)).click();
+        driver.findElement(By.id(INSTANCE.searchInput)).sendKeys("listado de liquidaciones");
+        driver.findElement(By.id(INSTANCE.liquidationList)).click();
+        wait(INSTANCE.waitingTimeAfterProcessLiquidation);
 
-        WebElement fileType = driver.findElement(By.id(FILE_TYPE_LIQUIDATION_LIST));
+        WebElement fileType = driver.findElement(By.id(INSTANCE.fileTypeLiquidationList));
         fileType.click();
         fileType.sendKeys(group.getFile().getType());
-        driver.findElement(By.id(FILE_YEAR_LIQUIDATION_LIST)).sendKeys(String.valueOf(group.getFile().getYear()));
-        driver.findElement(By.id(FILE_NUMBER_LIQUIDATION_LIST)).sendKeys(String.valueOf(group.getFile().getNumber()));
+        driver.findElement(By.id(INSTANCE.fileYearLiquidationList)).sendKeys(String.valueOf(group.getFile().getYear()));
+        driver.findElement(By.id(INSTANCE.fileNumberLiquidationList)).sendKeys(String.valueOf(group.getFile().getNumber()));
         scrollToEndPage();
-        driver.findElement(By.id(FILTER_BUTTON_LIQUIDATION_LIST)).click();
+        driver.findElement(By.id(INSTANCE.filterButtonLiquidationList)).click();
     }
 }

@@ -9,15 +9,17 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import liquidacionautomatica.exceptions.CredentialsNotFound;
+import lombok.Getter;
 
 /**
  *
  * @author rbayarri
  */
+@Getter
 public class User {
 
-  private String pilagaUser;
-  private String pilagaPassword;
+  private final String pilagaUser;
+  private final String pilagaPassword;
 
   public User() throws FileNotFoundException, IOException, CredentialsNotFound {
     String home = System.getenv("USERPROFILE");
@@ -28,22 +30,6 @@ public class User {
     this.pilagaPassword = contenidoCredenciales.readLine();
 
     validation();
-  }
-
-  public String getPilagaUser() {
-    return pilagaUser;
-  }
-
-  public void setPilagaUser(String pilagaUser) {
-    this.pilagaUser = pilagaUser;
-  }
-
-  public String getPilagaPassword() {
-    return pilagaPassword;
-  }
-
-  public void setPilagaPassword(String pilagaPassword) {
-    this.pilagaPassword = pilagaPassword;
   }
 
   public void validation() throws CredentialsNotFound {

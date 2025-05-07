@@ -1,122 +1,363 @@
 package liquidacionautomatica;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
+
+@Data
 public class HtmlElement {
 
-    public static final String PILAGA_URL = "http://pilaga.intranet.uncu.edu.ar/siu/pilaga/";
-    public static final String LOGIN_USER_INPUT = "ef_form_2000616_datosusuario";
-    public static final String LOGIN_PASSWORD_INPUT = "ef_form_2000616_datosclave";
-    public static final String CSS_LOGIN_BUTTON = "#form_2000616_datos_ingresar > span";
-    public static final String CSS_LOGIN_OTHER_ENTITY = "#cuadro_2000580_seleccion_unidad_gestion0_seleccion img";
-    public static final String ERROR_BUTTON = "boton_overlay";
-    public static final String ROOT_BUTTON = "boton_menu_raiz";
-    public static final String ROOT_EXPENSES = "elemento_menu_3435";
-    public static final String ROOT_PURCHASES = "elemento_menu_3440";
-    public static final String ROOT_DEVENGADO_PURCHASES = "elemento_menu_3442";
-    public static final String ROOT_NEW_DEVENGADO_PURCHASES = "elemento_menu_3334";
-    public static final String ROOT_BECAS = "elemento_menu_3476";
-    public static final String ROOT_DEVENGADO_BECAS = "elemento_menu_3480";
-    public static final String ROOT_DEPENDENCY_DEVENGADO_BECAS = "elemento_menu_3482";
-    public static final String ROOT_NEW_DEVENGADO_BECAS = "elemento_menu_3479";
-    public static final String DOCUMENT_INPUT = "ef_form_%s_filtro_refdocumento";
-    public static final String DOCUMENT_NUMBER_INPUT = "ef_form_%s_filtro_refnumero";
-    public static final String DOCUMENT_YEAR_INPUT = "ef_form_%s_filtro_refanio_doc";
-    public static final String FILTER_BUTTON = "form_%s_filtro_ref_filtrar";
-    public static final String TOBA_FORM = "formulario_toba";
-    public static final String CSS_ELEMENTS_FOUND = ".ei-cuadro-fila";
-    public static final String CSS_COMPROMISOS_FOUND_ROW = ".ei-cuadro-fila:nth-child(%d) > td:nth-child(2)";
-    public static final String COLLAPSE_FILTER_BUTTON = "colapsar_boton_js_form_%s_filtro_ref";
-    public static final String CSS_COMPROMISO_ROW = ".ei-cuadro-fila:nth-child(%d) > td:nth-child(5)";
-    public static final String ROW_SELECTION = "cuadro_1091_cuadro_ref%d_seleccion";
-    public static final String OP_TYPE_INPUT = "ef_form_84000147_printipo";
-    public static final String FILE_TYPE_INPUT = "ef_form_84000146_conttipo";
-    public static final String FILE_NUMBER_INPUT = "ef_form_84000146_contnumero";
-    public static final String FILE_YEAR_INPUT = "ef_form_84000146_contanio";
-    public static final String CHANGE_TAB = "ci_84000215_paso_alta_cambiar_tab_1";
-    public static final String DESCRIPTION_INPUT = "ef_form_84000211_gestiondescripcion";
-    public static final String PROVEEDOR_INPUT = "ef_form_84000211_gestionproveedor_desc";
-    public static final String CHANGE_TAB_2 = "ci_84000215_paso_alta_cambiar_tab_2";
-    public static final String ADD_INVOICE_BUTTON = "js_form_2045_formulario_compr_agregar";
-    public static final String INVOICE_TYPE_INPUT = "%d_ef_form_2045_formulario_comprtipo_de_comprobante";
-    public static final String INVOICE_NUMBER_INPUT = "%d_ef_form_2045_formulario_comprnumero";
-    public static final String INVOICE_DATE_INPUT = "%d_ef_form_2045_formulario_comprfecha";
-    public static final String INVOICE_AMOUNT_INPUT = "%d_ef_form_2045_formulario_comprimporte";
-    public static final String INVOICE_DESCRIPTION_INPUT = "%d_ef_form_2045_formulario_comprdetalle";
-    public static final String CHANGE_TAB_3 = "ci_84000215_paso_alta_cambiar_tab_3";
-    public static final String CANCEL_NEW = "ci_2035_cancelar";
-    public static final String CHANGE_TAB_1_INCENTIVOS = "ci_84000314_paso_alta_cambiar_tab_1";
-    public static final String CHANGE_TAB_2_INCENTIVOS = "ci_84000314_paso_alta_cambiar_tab_2";
-    public static final String DESCRIPTION_INCENTIVOS_INPUT = "ef_form_1537_gestiondescripcion";
-    public static final String BECA_PLAN_INPUT = "ef_form_1537_gestionplan_beca";
-    public static final String BECA_DEPENDENCY_INPUT = "ef_form_1537_gestiondependencia_vinculo";
-    public static final String NAME_FILTER_INPUT = "ef_form_1000115_pers_filtroup_nombre_n";
-    public static final String CSS_DEPENDENCY_SELECTION = "#cuadro_1000112_pers_popup0_seleccion img";
-    public static final String CSS_PARTIDAS_ROWS = "#cuerpo_js_form_%s_ppg_alta > table > tbody > tr";
-    public static final String AVAILABLE_PARTIDA_ROW = "%d_ef_form_%s_ppg_altasaldo";
-    public static final String AMOUNT_PARTIDA_ROW = "%d_ef_form_%s_ppg_altaimporte";
-    public static final String PROCESS_BUTTON = "ci_%s_procesar";
-    public static final String CSS_ERROR_PROCESS = ".overlay-mensaje div";
-    public static final String CANCEL_BUTTON = "ci_%s_cancelar";
-    public static final String MAIN_DOC = "ef_form_20000352_documentosdocumento_principal";
-    public static final String FINISH_BUTTON = "ci_%s_finalizar";
-    public static final String SEARCH_INPUT = "buscar_text";
-    public static final String NEW_GROUP_BUTTON = "elemento_menu_listado_5000063";
-    public static final String TYPE_OP_GROUP_INPUT = "ef_form_50000074_filtrodocumento";
-    public static final String FILE_TYPE_GROUP_INPUT = "ef_form_50000074_filtrocontenedor";
-    public static final String FILE_NUMBER_GROUP_INPUT = "ef_form_50000074_filtronumero_cont";
-    public static final String FILE_YEAR_GROUP_INPUT = "ef_form_50000074_filtroanio_cont";
-    public static final String LEVEL_FROM_GROUP_INPUT = "ef_form_50000074_filtronivel_autoriz_desde";
-    public static final String CVU_CHECK_INPUT = "ef_form_50000074_filtrocon_cbu";
-    public static final String LIQUIDATION_FILTER_GROUP_BUTTON = "form_50000074_filtro_filtrar";
-    public static final String COLLAPSE_FILTER_GROUP_BUTTON = "colapsar_boton_js_form_50000074_filtro";
-    public static final String GROUP_NAME_INPUT = "ef_form_5000208_formularionombre";
-    public static final String SELECT_ALL_GROUP_CHECK = "js_cuadro_84000011_cuadro_todos";
-    public static final String ADD_LIQUIDATION_TO_GROUP = "cuadro_84000011_cuadro_procesar";
-    public static final String LEVEL_4_GROUP_AUTHORIZATION = "elemento_menu_listado_50000022";
-    public static final String GROUP_SELECTION_AUTHORIZATION_INPUT = "ef_form_17000058_filtrogrupo_vinculo";
-    public static final String GROUP_NAME_INPUT_SELECTION_GROUP_WINDOW = "ef_form_50000060_filtronombre";
-    public static final String FILTER_GROUP_WINDOW_BUTTON = "form_50000060_filtro_filtrar";
-    public static final String SELECT_GROUP_WINDOW_BUTTON = "cuadro_50000064_cuadro0_seleccion";
-    public static final String FILTER_BUTTON_LEVEL_4_GROUP_AUTHORIZATION = "form_17000058_filtro_filtrar";
-    public static final String CSS_OP_COLUMN_LEVEL_4_GROUP_AUTHORIZATION = ".ei-cuadro-cc-fondo tbody tr:nth-child(%d) td:nth-child(4)";
-    public static final String LEVEL_4_AUTHORIZATION = "elemento_menu_listado_3000046";
-    public static final String OP_TYPE_LEVEL_4_AUTHORIZATION = "ef_form_5000132_filtrodocumento";
-    public static final String OP_NUMBER_LEVEL_4_AUTHORIZATION = "ef_form_5000132_filtronumero";
-    public static final String OP_YEAR_LEVEL_4_AUTHORIZATION = "ef_form_5000132_filtroanio_doc";
-    public static final String FILTER_BUTTON_LEVEL_4_AUTHORIZATION = "form_5000132_filtro_filtrar";
-    public static final String OP_SELECTION_LEVEL_4_AUTHORIZATION = "cuadro_3000148_cuadro0_seleccion";
-    public static final String AUTHORIZE_BUTTON_LEVEL_4_AUTHORIZATION = "form_1564_formulario_modificacion";
-    public static final String ADD_LINE_RETENTION = "js_form_2037_formulario_agregar";
-    public static final String RETENTION_AMOUNT =  "s_ef_form_2037_formularioimporte_retenido";
-    public static final String PROCESS_RETENTION = "ci_3000141_asignar_retenciones_procesar";
-    public static final String CANCEL_RETENTION_BUTTON = "ci_3000141_asignar_retenciones_cancelar";
-    public static final String COLLAPSE_RETENTION_FILTER = "colapsar_boton_js_form_5000132_filtro";
-    public static final String TAX_CONCEPT = "%d_ef_form_2037_formularioconcepto";
-    public static final String RETENTION_FORM = "js_ci_3000141_asignar_retenciones_cont";
-    public static final String TAX_REGIMEN = "%d_ef_form_2037_formularioregimen";
-    public static final String TAX_BASE = "%d_ef_form_2037_formulariomonto_base";
-    public static final String TAX_CALCULATE = "form_2037_formulario%d_calcular";
-    public static final String SELECT_ALL_LEVEL_4_GROUP = "js_cuadro_84000012_cuadro_todos";
-    public static final String PROCESS_LEVEL_4_AUTHORIZATION_GROUP = "cuadro_84000012_cuadro_procesar";
-    public static final String LEVEL_7_GROUP_AUTHORIZATION = "elemento_menu_listado_50000024";
-    public static final String CSS_LEVEL_TOTAL = ".ei-cuadro-total.col-num-p1 > strong";
-    public static final String LIQUIDATION_LIST = "elemento_menu_listado_5000043";
-    public static final String FILE_TYPE_LIQUIDATION_LIST = "ef_form_5000135_filtrocontenedor";
-    public static final String FILE_YEAR_LIQUIDATION_LIST = "ef_form_5000135_filtroanio_cont";
-    public static final String FILE_NUMBER_LIQUIDATION_LIST = "ef_form_5000135_filtronumero_cont";
-    public static final String FILTER_BUTTON_LIQUIDATION_LIST = "form_5000135_filtro_filtrar";
+    public static HtmlElement INSTANCE;
+    public boolean isLocal;
 
-    public static final int WAITING_TIME_AFTER_LOGIN = 1500;
-    public static final int WAITING_TIME_AFTER_SCREEN_SELECTION = 2000;
-    public static final int WAITING_TIME_AFTER_LOOK_FOR_COMPROMISO = 1500;
-    public static final int WAITING_TIME_AFTER_ROW_SELECTION = 500;
-    public static final int WAITING_TIME_TO_CHANGE_TAB = 500;
-    public static final int WAITING_TIME_TO_OPEN_DEPENDENCY_WINDOW = 1500;
-    public static final int WAITING_TIME_TO_COMPLETE_PARTIDAS = 1000;
-    public static final int WAITING_TIME_AFTER_PROCESS_LIQUIDATION = 500;
-    public static final int WAITING_TIME_AFTER_FILTERING = 1000;
-    public static final int WAITING_TIME_TO_FILTER_GROUP_LIQUIDATIONS_LEVEL_4 = 1000;
-    public static final int WAITING_TIME_TO_PROCESS_RETENTION = 1000;
-    public static final int WAITING_TIME_AFTER_TAX_SELECTION = 2000;
-    public static final int WAITING_TIME_AFTER_FINISH_OP = 1000;
-    public static final int WAITING_TIME_BEFORE_ADD_LINE_RETENTION = 400;
+    @JsonProperty("PILAGA_URL")
+    public String pilagaUrl;
+
+    @JsonProperty("LOGIN_USER_INPUT")
+    public String loginUserInput;
+
+    @JsonProperty("LOGIN_PASSWORD_INPUT")
+    public String loginPasswordInput;
+
+    @JsonProperty("CSS_LOGIN_BUTTON")
+    public String cssLoginButton;
+
+    @JsonProperty("CSS_LOGIN_OTHER_ENTITY")
+    public String cssLoginOtherEntity;
+
+    @JsonProperty("ERROR_BUTTON")
+    public String errorButton;
+
+    @JsonProperty("ROOT_BUTTON")
+    public String rootButton;
+
+    @JsonProperty("ROOT_EXPENSES")
+    public String rootExpenses;
+
+    @JsonProperty("ROOT_PURCHASES")
+    public String rootPurchases;
+
+    @JsonProperty("ROOT_DEVENGADO_PURCHASES")
+    public String rootDevengadoPurchases;
+
+    @JsonProperty("ROOT_NEW_DEVENGADO_PURCHASES")
+    public String rootNewDevengadoPurchases;
+
+    @JsonProperty("ROOT_BECAS")
+    public String rootBecas;
+
+    @JsonProperty("ROOT_DEVENGADO_BECAS")
+    public String rootDevengadoBecas;
+
+    @JsonProperty("ROOT_DEPENDENCY_DEVENGADO_BECAS")
+    public String rootDependencyDevengadoBecas;
+
+    @JsonProperty("ROOT_NEW_DEVENGADO_BECAS")
+    public String rootNewDevengadoBecas;
+
+    @JsonProperty("DOCUMENT_INPUT")
+    public String documentInput;
+
+    @JsonProperty("DOCUMENT_NUMBER_INPUT")
+    public String documentNumberInput;
+
+    @JsonProperty("DOCUMENT_YEAR_INPUT")
+    public String documentYearInput;
+
+    @JsonProperty("FILTER_BUTTON")
+    public String filterButton;
+
+    @JsonProperty("TOBA_FORM")
+    public String tobaForm;
+
+    @JsonProperty("CSS_ELEMENTS_FOUND")
+    public String cssElementsFound;
+
+    @JsonProperty("CSS_COMPROMISOS_FOUND_ROW")
+    public String cssCompromisosFoundRow;
+
+    @JsonProperty("COLLAPSE_FILTER_BUTTON")
+    public String collapseFilterButton;
+
+    @JsonProperty("CSS_COMPROMISO_ROW")
+    public String cssCompromisoRow;
+
+    @JsonProperty("ROW_SELECTION")
+    public String rowSelection;
+
+    @JsonProperty("OP_TYPE_INPUT")
+    public String opTypeInput;
+
+    @JsonProperty("FILE_TYPE_INPUT")
+    public String fileTypeInput;
+
+    @JsonProperty("FILE_NUMBER_INPUT")
+    public String fileNumberInput;
+
+    @JsonProperty("FILE_YEAR_INPUT")
+    public String fileYearInput;
+
+    @JsonProperty("CHANGE_TAB")
+    public String changeTab;
+
+    @JsonProperty("DESCRIPTION_INPUT")
+    public String descriptionInput;
+
+    @JsonProperty("PROVEEDOR_INPUT")
+    public String proveedorInput;
+
+    @JsonProperty("CHANGE_TAB_2")
+    public String changeTab2;
+
+    @JsonProperty("ADD_INVOICE_BUTTON")
+    public String addInvoiceButton;
+
+    @JsonProperty("INVOICE_TYPE_INPUT")
+    public String invoiceTypeInput;
+
+    @JsonProperty("INVOICE_NUMBER_INPUT")
+    public String invoiceNumberInput;
+
+    @JsonProperty("INVOICE_DATE_INPUT")
+    public String invoiceDateInput;
+
+    @JsonProperty("INVOICE_AMOUNT_INPUT")
+    public String invoiceAmountInput;
+
+    @JsonProperty("INVOICE_DESCRIPTION_INPUT")
+    public String invoiceDescriptionInput;
+
+    @JsonProperty("CHANGE_TAB_3")
+    public String changeTab3;
+
+    @JsonProperty("CANCEL_NEW")
+    public String cancelNew;
+
+    @JsonProperty("CHANGE_TAB_1_INCENTIVOS")
+    public String changeTab1Incentivos;
+
+    @JsonProperty("CHANGE_TAB_2_INCENTIVOS")
+    public String changeTab2Incentivos;
+
+    @JsonProperty("DESCRIPTION_INCENTIVOS_INPUT")
+    public String descriptionIncentivosInput;
+
+    @JsonProperty("BECA_PLAN_INPUT")
+    public String becaPlanInput;
+
+    @JsonProperty("BECA_DEPENDENCY_INPUT")
+    public String becaDependencyInput;
+
+    @JsonProperty("NAME_FILTER_INPUT")
+    public String nameFilterInput;
+
+    @JsonProperty("CSS_DEPENDENCY_SELECTION")
+    public String cssDependencySelection;
+
+    @JsonProperty("CSS_PARTIDAS_ROWS")
+    public String cssPartidasRows;
+
+    @JsonProperty("AVAILABLE_PARTIDA_ROW")
+    public String availablePartidaRow;
+
+    @JsonProperty("AMOUNT_PARTIDA_ROW")
+    public String amountPartidaRow;
+
+    @JsonProperty("PROCESS_BUTTON")
+    public String processButton;
+
+    @JsonProperty("CSS_ERROR_PROCESS")
+    public String cssErrorProcess;
+
+    @JsonProperty("CANCEL_BUTTON")
+    public String cancelButton;
+
+    @JsonProperty("MAIN_DOC")
+    public String mainDoc;
+
+    @JsonProperty("FINISH_BUTTON")
+    public String finishButton;
+
+    @JsonProperty("SEARCH_INPUT")
+    public String searchInput;
+
+    @JsonProperty("NEW_GROUP_BUTTON")
+    public String newGroupButton;
+
+    @JsonProperty("TYPE_OP_GROUP_INPUT")
+    public String typeOpGroupInput;
+
+    @JsonProperty("FILE_TYPE_GROUP_INPUT")
+    public String fileTypeGroupInput;
+
+    @JsonProperty("FILE_NUMBER_GROUP_INPUT")
+    public String fileNumberGroupInput;
+
+    @JsonProperty("FILE_YEAR_GROUP_INPUT")
+    public String fileYearGroupInput;
+
+    @JsonProperty("LEVEL_FROM_GROUP_INPUT")
+    public String levelFromGroupInput;
+
+    @JsonProperty("CVU_CHECK_INPUT")
+    public String cvuCheckInput;
+
+    @JsonProperty("LIQUIDATION_FILTER_GROUP_BUTTON")
+    public String liquidationFilterGroupButton;
+
+    @JsonProperty("COLLAPSE_FILTER_GROUP_BUTTON")
+    public String collapseFilterGroupButton;
+
+    @JsonProperty("GROUP_NAME_INPUT")
+    public String groupNameInput;
+
+    @JsonProperty("SELECT_ALL_GROUP_CHECK")
+    public String selectAllGroupCheck;
+
+    @JsonProperty("ADD_LIQUIDATION_TO_GROUP")
+    public String addLiquidationToGroup;
+
+    @JsonProperty("LEVEL_4_GROUP_AUTHORIZATION")
+    public String level4GroupAuthorization;
+
+    @JsonProperty("GROUP_SELECTION_AUTHORIZATION_INPUT")
+    public String groupSelectionAuthorizationInput;
+
+    @JsonProperty("GROUP_NAME_INPUT_SELECTION_GROUP_WINDOW")
+    public String groupNameInputSelectionGroupWindow;
+
+    @JsonProperty("FILTER_GROUP_WINDOW_BUTTON")
+    public String filterGroupWindowButton;
+
+    @JsonProperty("SELECT_GROUP_WINDOW_BUTTON")
+    public String selectGroupWindowButton;
+
+    @JsonProperty("FILTER_BUTTON_LEVEL_4_GROUP_AUTHORIZATION")
+    public String filterButtonLevel4GroupAuthorization;
+
+    @JsonProperty("CSS_OP_COLUMN_LEVEL_4_GROUP_AUTHORIZATION")
+    public String cssOpColumnLevel4GroupAuthorization;
+
+    @JsonProperty("LEVEL_4_AUTHORIZATION")
+    public String level4Authorization;
+
+    @JsonProperty("OP_TYPE_LEVEL_4_AUTHORIZATION")
+    public String opTypeLevel4Authorization;
+
+    @JsonProperty("OP_NUMBER_LEVEL_4_AUTHORIZATION")
+    public String opNumberLevel4Authorization;
+
+    @JsonProperty("OP_YEAR_LEVEL_4_AUTHORIZATION")
+    public String opYearLevel4Authorization;
+
+    @JsonProperty("FILTER_BUTTON_LEVEL_4_AUTHORIZATION")
+    public String filterButtonLevel4Authorization;
+
+    @JsonProperty("OP_SELECTION_LEVEL_4_AUTHORIZATION")
+    public String opSelectionLevel4Authorization;
+
+    @JsonProperty("AUTHORIZE_BUTTON_LEVEL_4_AUTHORIZATION")
+    public String authorizeButtonLevel4Authorization;
+
+    @JsonProperty("ADD_LINE_RETENTION")
+    public String addLineRetention;
+
+    @JsonProperty("RETENTION_AMOUNT")
+    public String retentionAmount;
+
+    @JsonProperty("PROCESS_RETENTION")
+    public String processRetention;
+
+    @JsonProperty("CANCEL_RETENTION_BUTTON")
+    public String cancelRetentionButton;
+
+    @JsonProperty("COLLAPSE_RETENTION_FILTER")
+    public String collapseRetentionFilter;
+
+    @JsonProperty("TAX_CONCEPT")
+    public String taxConcept;
+
+    @JsonProperty("RETENTION_FORM")
+    public String retentionForm;
+
+    @JsonProperty("TAX_REGIMEN")
+    public String taxRegimen;
+
+    @JsonProperty("TAX_BASE")
+    public String taxBase;
+
+    @JsonProperty("TAX_CALCULATE")
+    public String taxCalculate;
+
+    @JsonProperty("SELECT_ALL_LEVEL_4_GROUP")
+    public String selectAllLevel4Group;
+
+    @JsonProperty("PROCESS_LEVEL_4_AUTHORIZATION_GROUP")
+    public String processLevel4AuthorizationGroup;
+
+    @JsonProperty("LEVEL_7_GROUP_AUTHORIZATION")
+    public String level7GroupAuthorization;
+
+    @JsonProperty("CSS_LEVEL_TOTAL")
+    public String cssLevelTotal;
+
+    @JsonProperty("LIQUIDATION_LIST")
+    public String liquidationList;
+
+    @JsonProperty("FILE_TYPE_LIQUIDATION_LIST")
+    public String fileTypeLiquidationList;
+
+    @JsonProperty("FILE_YEAR_LIQUIDATION_LIST")
+    public String fileYearLiquidationList;
+
+    @JsonProperty("FILE_NUMBER_LIQUIDATION_LIST")
+    public String fileNumberLiquidationList;
+
+    @JsonProperty("FILTER_BUTTON_LIQUIDATION_LIST")
+    public String filterButtonLiquidationList;
+
+    @JsonProperty("WAITING_TIME_AFTER_LOGIN")
+    public int waitingTimeAfterLogin;
+
+    @JsonProperty("WAITING_TIME_AFTER_SCREEN_SELECTION")
+    public int waitingTimeAfterScreenSelection;
+
+    @JsonProperty("WAITING_TIME_AFTER_LOOK_FOR_COMPROMISO")
+    public int waitingTimeAfterLookForCompromiso;
+
+    @JsonProperty("WAITING_TIME_AFTER_ROW_SELECTION")
+    public int waitingTimeAfterRowSelection;
+
+    @JsonProperty("WAITING_TIME_TO_CHANGE_TAB")
+    public int waitingTimeToChangeTab;
+
+    @JsonProperty("WAITING_TIME_TO_OPEN_DEPENDENCY_WINDOW")
+    public int waitingTimeToOpenDependencyWindow;
+
+    @JsonProperty("WAITING_TIME_TO_COMPLETE_PARTIDAS")
+    public int waitingTimeToCompletePartidas;
+
+    @JsonProperty("WAITING_TIME_AFTER_PROCESS_LIQUIDATION")
+    public int waitingTimeAfterProcessLiquidation;
+
+    @JsonProperty("WAITING_TIME_AFTER_FILTERING")
+    public int waitingTimeAfterFiltering;
+
+    @JsonProperty("WAITING_TIME_TO_FILTER_GROUP_LIQUIDATIONS_LEVEL_4")
+    public int waitingTimeToFilterGroupLiquidationsLevel4;
+
+    @JsonProperty("WAITING_TIME_TO_PROCESS_RETENTION")
+    public int waitingTimeToProcessRetention;
+
+    @JsonProperty("WAITING_TIME_AFTER_TAX_SELECTION")
+    public int waitingTimeAfterTaxSelection;
+
+    @JsonProperty("WAITING_TIME_AFTER_FINISH_OP")
+    public int waitingTimeAfterFinishOp;
+
+    @JsonProperty("WAITING_TIME_BEFORE_ADD_LINE_RETENTION")
+    public int waitingTimeBeforeAddLineRetention;
+
+    public static void load(HtmlElement config) {
+        INSTANCE = config;
+    }
 }

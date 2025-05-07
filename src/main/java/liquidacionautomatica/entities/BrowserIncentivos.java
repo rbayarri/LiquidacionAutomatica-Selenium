@@ -1,11 +1,9 @@
 package liquidacionautomatica.entities;
 
+import liquidacionautomatica.HtmlElement;
 import lombok.Getter;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-
-import static liquidacionautomatica.HtmlElement.*;
-import static liquidacionautomatica.HtmlElement.ROOT_NEW_DEVENGADO_BECAS;
 
 @Getter
 public class BrowserIncentivos extends Browser {
@@ -17,39 +15,39 @@ public class BrowserIncentivos extends Browser {
 
     @Override
     public void goToNew() {
-        driver.findElement(By.id(ROOT_BUTTON)).click();
-        driver.findElement(By.id(ROOT_EXPENSES)).click();
-        driver.findElement(By.id(ROOT_BECAS)).click();
-        driver.findElement(By.id(ROOT_DEVENGADO_BECAS)).click();
-        driver.findElement(By.id(ROOT_DEPENDENCY_DEVENGADO_BECAS)).click();
-        driver.findElement(By.id(ROOT_NEW_DEVENGADO_BECAS)).click();
-        wait(WAITING_TIME_AFTER_SCREEN_SELECTION);
+        driver.findElement(By.id(HtmlElement.INSTANCE.rootButton)).click();
+        driver.findElement(By.id(HtmlElement.INSTANCE.rootExpenses)).click();
+        driver.findElement(By.id(HtmlElement.INSTANCE.rootBecas)).click();
+        driver.findElement(By.id(HtmlElement.INSTANCE.rootDevengadoBecas)).click();
+        driver.findElement(By.id(HtmlElement.INSTANCE.rootDependencyDevengadoBecas)).click();
+        driver.findElement(By.id(HtmlElement.INSTANCE.rootNewDevengadoBecas)).click();
+        wait(HtmlElement.INSTANCE.waitingTimeAfterScreenSelection);
     }
 
     @Override
     protected void completeSpecificData(Liquidation liquidation) {
-        driver.findElement(By.id(CHANGE_TAB_1_INCENTIVOS)).click();
-        wait(WAITING_TIME_TO_CHANGE_TAB);
-        WebElement descriptionIncentivosInput = driver.findElement(By.id(DESCRIPTION_INCENTIVOS_INPUT));
+        driver.findElement(By.id(HtmlElement.INSTANCE.changeTab1Incentivos)).click();
+        wait(HtmlElement.INSTANCE.waitingTimeToChangeTab);
+        WebElement descriptionIncentivosInput = driver.findElement(By.id(HtmlElement.INSTANCE.descriptionIncentivosInput));
         String newDescripcion = descriptionIncentivosInput.getText() + " " + liquidation.getDescription();
         descriptionIncentivosInput.clear();
         descriptionIncentivosInput.sendKeys(newDescripcion);
-        WebElement becaPlanInput = driver.findElement(By.id(BECA_PLAN_INPUT));
+        WebElement becaPlanInput = driver.findElement(By.id(HtmlElement.INSTANCE.becaPlanInput));
         becaPlanInput.click();
         becaPlanInput.sendKeys("ORD");
-        driver.findElement(By.id(BECA_DEPENDENCY_INPUT)).click();
+        driver.findElement(By.id(HtmlElement.INSTANCE.becaDependencyInput)).click();
 
-        vars.put("dependencyWindow", waitForWindow(WAITING_TIME_TO_OPEN_DEPENDENCY_WINDOW));
+        vars.put("dependencyWindow", waitForWindow(HtmlElement.INSTANCE.waitingTimeToOpenDependencyWindow));
         driver.switchTo().window(vars.get("dependencyWindow").toString());
-        WebElement nameFilterInput = driver.findElement(By.id(NAME_FILTER_INPUT));
+        WebElement nameFilterInput = driver.findElement(By.id(HtmlElement.INSTANCE.nameFilterInput));
         nameFilterInput.click();
         nameFilterInput.sendKeys(((Liquidation36) liquidation).getDependency());
 //        driver.findElement(By.cssSelector("u")).click();
-        driver.findElement(By.cssSelector(CSS_DEPENDENCY_SELECTION)).click();
+        driver.findElement(By.cssSelector(HtmlElement.INSTANCE.cssDependencySelection)).click();
         driver.switchTo().window(originalWindow);
         vars.remove("dependencyWindow");
 
-        driver.findElement(By.id(CHANGE_TAB_2_INCENTIVOS)).click();
+        driver.findElement(By.id(HtmlElement.INSTANCE.changeTab2Incentivos)).click();
     }
 
     @Override

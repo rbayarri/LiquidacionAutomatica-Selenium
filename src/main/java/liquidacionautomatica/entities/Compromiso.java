@@ -5,39 +5,20 @@
  */
 package liquidacionautomatica.entities;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  *
  * @author renzo
  */
+@Getter
+@Setter
 public class Compromiso {
 
   private String type;
   private Integer number;
   private Integer year;
-
-  public String getType() {
-    return type;
-  }
-
-  public void setType(String type) {
-    this.type = type;
-  }
-
-  public Integer getNumber() {
-    return number;
-  }
-
-  public void setNumber(Integer number) {
-    this.number = number;
-  }
-
-  public Integer getYear() {
-    return year;
-  }
-
-  public void setYear(Integer year) {
-    this.year = year;
-  }
 
   @Override
   public String toString() {

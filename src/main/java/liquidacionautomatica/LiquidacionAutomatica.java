@@ -4,14 +4,15 @@
  */
 package liquidacionautomatica;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.util.concurrent.TimeUnit;
 import javax.swing.JOptionPane;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 import liquidacionautomatica.entities.User;
 import liquidacionautomatica.exceptions.CredentialsNotFound;
+import org.apache.hc.client5.http.fluent.Request;
+import org.apache.hc.core5.util.Timeout;
 
 /**
  *
@@ -23,6 +24,40 @@ public class LiquidacionAutomatica {
    * @param args the command line arguments
    */
   public static void main(String[] args) {
+
+    ObjectMapper mapper = new ObjectMapper();
+    try {
+      String json = Request.get("https://mabay.com.ar/uncuyo/config-system.json")
+              .connectTimeout(Timeout.of(5000, TimeUnit.MILLISECONDS))
+              .responseTimeout(Timeout.of(5000, TimeUnit.MILLISECONDS))
+              .execute()
+              .returnContent()
+              .asString();
+      HtmlElement config = mapper.readValue(json, HtmlElement.class);
+      config.isLocal = false;
+      HtmlElement.load(config);
+    } catch (Exception e) {
+      e.printStackTrace();
+      System.out.println("No se pudo cargar la configuración. Se cargará la configuración local.");
+      FileInputStream fileInputStream = null;
+      try {
+        fileInputStream = new FileInputStream("config-system.json");
+        HtmlElement config = mapper.readValue(fileInputStream, HtmlElement.class);
+        config.isLocal = true;
+        HtmlElement.load(config);
+        System.out.println("Configuración cargada desde archivo local");
+      } catch (IOException ex) {
+        ex.printStackTrace();
+      } finally {
+        if (fileInputStream != null) {
+          try {
+            fileInputStream.close();
+          } catch (IOException ex) {
+            ex.printStackTrace();
+          }
+        }
+      }
+    }
 
     User user = null;
     boolean creado = false;
