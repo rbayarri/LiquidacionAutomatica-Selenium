@@ -48,6 +48,9 @@ public class LiquidacionAutomatica {
         System.out.println("Configuración cargada desde archivo local");
       } catch (IOException ex) {
         ex.printStackTrace();
+        JOptionPane.showMessageDialog(null, "No se encontró archivo de configuración local. " +
+                "Por favor, verifique que el archivo config-system.json esté en la misma carpeta que el ejecutable.");
+        return;
       } finally {
         if (fileInputStream != null) {
           try {
@@ -75,12 +78,17 @@ public class LiquidacionAutomatica {
         }
         FileWriter result;
         try {
-          String home = System.getenv("USERPROFILE");
-          result = new FileWriter(home + "\\credenciales.txt");
+          String home;
+          home = System.getenv("USERPROFILE");
+          if (home == null) {
+            home = System.getProperty("user.home");
+          }
+          result = new FileWriter(String.format("%s%scredenciales.txt", home, File.separator));
           BufferedWriter resultWriter = new BufferedWriter(result);
           resultWriter.write(usuarioPilaga + "\n" + clavePilaga);
           resultWriter.close();
         } catch (IOException ex) {
+          ex.printStackTrace();
           JOptionPane.showMessageDialog(null, "Error al crear el archivo credenciales.txt");
         }
       }

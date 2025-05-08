@@ -4,10 +4,8 @@
  */
 package liquidacionautomatica.entities;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+
 import liquidacionautomatica.exceptions.CredentialsNotFound;
 import lombok.Getter;
 
@@ -21,9 +19,13 @@ public class User {
   private final String pilagaUser;
   private final String pilagaPassword;
 
-  public User() throws FileNotFoundException, IOException, CredentialsNotFound {
-    String home = System.getenv("USERPROFILE");
-    FileReader leerArchivoCredenciales = new FileReader(home + "\\credenciales.txt");
+  public User() throws IOException, CredentialsNotFound {
+    String home;
+    home = System.getenv("USERPROFILE");
+    if (home == null) {
+      home = System.getProperty("user.home");
+    }
+    FileReader leerArchivoCredenciales = new FileReader(String.format("%s%scredenciales.txt", home, File.separator));
     BufferedReader contenidoCredenciales = new BufferedReader(leerArchivoCredenciales);
 
     this.pilagaUser = contenidoCredenciales.readLine();

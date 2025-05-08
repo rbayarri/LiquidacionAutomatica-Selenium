@@ -123,6 +123,7 @@ public interface ExcelReader {
 
     default void completeOP(Group group, XSSFWorkbook workbook, File file) {
         XSSFSheet sheet = workbook.getSheetAt(0);
+
         for (Liquidation liquidation : group.getLiquidaciones()) {
 
             if (Objects.isNull(liquidation.getOp())) {
@@ -145,9 +146,9 @@ public interface ExcelReader {
                 }
 
                 // Get or create the cell
-                Cell cell = row.getCell(getOpColumn());
+                Cell cell = row.getCell(getOpColumn() - 1);
                 if (cell == null) {
-                    cell = row.createCell(getOpColumn());
+                    cell = row.createCell(getOpColumn() - 1);
                 }
 
                 // Set the value

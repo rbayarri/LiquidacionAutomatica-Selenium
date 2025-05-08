@@ -8,6 +8,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.*;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
@@ -401,6 +402,8 @@ public class LiquidacionJFrame extends javax.swing.JFrame {
             return;
         }
 
+        JOptionPane.showMessageDialog(null, "Durante la ejecución, el programa escribirá en el archivo Excel seleccionado. Si el archivo se encuentra abierto por otro programa, los cambios no se reflejarán hasta que no se cierre el mismo");
+
         XSSFSheet sheet = workbook.getSheetAt(0);
         LiquidationType liquidationType = LiquidationType.fromDescription(this.typeLiquidacion.getSelectedItem().toString());
 
@@ -424,7 +427,7 @@ public class LiquidacionJFrame extends javax.swing.JFrame {
         Logger rootLogger = Logger.getLogger("");
         try {
             // Create a FileHandler to write logs to the specified file
-            FileHandler fileHandler = new FileHandler(String.format("%s%soutput-%s.txt", directory, File.separator,  group.getGroupName()), true); // Append mode
+            FileHandler fileHandler = new FileHandler(String.format("%s%soutput-%s.txt", directory, File.separator, group.getGroupName()), true); // Append mode
             fileHandler.setFormatter(new SimpleFormatter()); // Use a simple text format
 
             // Add the FileHandler to the root logger
@@ -437,7 +440,9 @@ public class LiquidacionJFrame extends javax.swing.JFrame {
             PrintStream fileOut = new PrintStream(new FileOutputStream(String.format("%s%soutput-%s.txt", directory, File.separator, group.getGroupName()), true));
             System.setOut(fileOut);
             System.setErr(fileOut);
-            System.out.printf("Configuración: %s%n", HtmlElement.INSTANCE.isLocal()? "local" : "server");
+            System.out.println("-----------------------------------------------------------------------");
+            System.out.printf("Ejecución del programa: %s%n", LocalDateTime.now());
+            System.out.printf("Configuración: %s%n", HtmlElement.INSTANCE.isLocal() ? "local" : "server");
         } catch (FileNotFoundException e) {
             System.out.println("Error opening file: " + e.getMessage());
         } catch (IOException e) {

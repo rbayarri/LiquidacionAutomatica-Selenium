@@ -18,25 +18,29 @@ public class OperationWriter extends Writer {
     }
 
     public void writeFirstRead(Group group) {
+        StringBuilder message = new StringBuilder();
+        message.append("-------------------------------------------------------------\n");
+        message.append(String.format("%-30s", "Nombre del grupo:"));
+        message.append(group.getGroupName()).append("\n");
+        message.append(String.format("%-30s", "Expediente:"));
+        message.append(group.getFile().toString()).append("\n");
+        message.append(String.format("%-30s", "Liquidaciones a realizar:"));
+        message.append(group.getLiquidaciones().size()).append("\n");
+        message.append(String.format("%-30s", "Importe total a liquidar"));
+        message.append(Utils.toCurrencyFormat(group.getTotalAmount())).append("\n\n\n");
 
-        String message = String.format("%-30s", "Nombre del grupo:");
-        message += group.getGroupName() + "\n";
-        message += String.format("%-30s", "Expediente:");
-        message += group.getFile().toString() + "\n";
-        message += String.format("%-30s", "Liquidaciones a realizar:");
-        message += group.getLiquidaciones().size() + "\n";
-        message += String.format("%-30s", "Importe total a liquidar");
-        message += Utils.toCurrencyFormat(group.getTotalAmount());
-        message += "\n\n\n";
-
-        this.write(message);
+        this.write(message.toString());
     }
 
     public void writeResultLiquidacion(Group group) {
         StringBuilder message = new StringBuilder("Resultados de la liquidación:\n\n");
         for (Liquidation l : group.getLiquidaciones()) {
             if (l.getResultLiquidacion() == null) {
-                l.setResultLiquidacion("Liquidada con anterioridad");
+                if (l.getOp() != null) {
+                    l.setResultLiquidacion(String.format("%s - Liquidada con anterioridad", l.getOp()));
+                } else {
+                    l.setResultLiquidacion("Liquidación no realizada");
+                }
             }
             message.append(l.getResultLiquidacion());
             message.append("\n");
