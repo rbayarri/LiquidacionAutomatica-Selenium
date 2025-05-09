@@ -396,6 +396,7 @@ public abstract class Browser {
         completeDataFileCreateGroup(group);
         scrollToEndPage();
         driver.findElement(By.id(INSTANCE.liquidationFilterGroupButton)).click();
+        wait(INSTANCE.waitingTimeAfterFiltering);
         driver.findElement(By.id(INSTANCE.collapseFilterGroupButton)).click();
 
         List<Integer> op = new ArrayList<>();
