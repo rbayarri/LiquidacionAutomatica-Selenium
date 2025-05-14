@@ -92,8 +92,8 @@ public interface ExcelReader {
         }
 
         try {
-            aux = Double.parseDouble(cell.toString());
-            return String.valueOf(aux);
+            double numericValue = cell.getNumericCellValue();
+            return new BigDecimal(numericValue).toPlainString();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "El importe no puede ser leido correctamente");
             System.exit(0);

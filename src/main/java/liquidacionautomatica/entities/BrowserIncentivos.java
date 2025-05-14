@@ -42,7 +42,7 @@ public class BrowserIncentivos extends Browser {
         WebElement nameFilterInput = driver.findElement(By.id(HtmlElement.INSTANCE.nameFilterInput));
         nameFilterInput.click();
         nameFilterInput.sendKeys(((Liquidation36) liquidation).getDependency());
-//        driver.findElement(By.cssSelector("u")).click();
+        driver.findElement(By.cssSelector("u")).click(); // Esta línea se utiliza para terminar de seleccionar la dependencia y que se collapse el desplegable
         driver.findElement(By.cssSelector(HtmlElement.INSTANCE.cssDependencySelection)).click();
         driver.switchTo().window(originalWindow);
         vars.remove("dependencyWindow");
